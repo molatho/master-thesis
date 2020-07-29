@@ -1,0 +1,81 @@
+%4. Problemraum (Prototyp, Testaufbauten, bestehende Software)
+\chapter{Understanding the Problem Space}
+\label{chap:understanding-the-problem-space}
+In order to provide a satisfying solution to the problem at hand, the problem itself and the environment it occurs in must be researched. This chapter aims to explore and examine the problem space, resulting in a set of artifacts (namely a domain model and a set of requirements) that aid in understanding the context and designing an appropriate solution. First, a prototypical network proxy is implemented in section \ref{sec:prototypical-implementation} to get an understanding of the problems and challenges involved in designing, implementing and using such software. Based on these experiences, interviews with experts in penetration testing are conducted and evaluated in section \ref{sec:interviews} to get a proper understanding of their everyday work and resulting problems. Lastly, existing software that aims to intercept communication for various scenarios and technologies is examined in section \ref{sec:analysis-existing-software}, compared to each other and their usefulness for the problem-specific scenarios is assessed.
+
+\section{Prototypical Implementation}
+\label{sec:prototypical-implementation}
+\emph{TBD; implementation is completed, needs to be written down; include its diagrams} %TODO
+
+\section{Interviewing Experts for Insights}
+\label{sec:interviews}
+Interviews may be an efficient way to get an expert’s opinion on something they are a professional in. Thus, expert interviews were conducted to let security researchers give insight into their everyday work and the challenges they face. The information and insights gathered in these interviews were then used to model a persona, various work scenarios and use-cases that as a whole aim to represent their work.
+
+\subsection{Interview Guideline}
+An interview guideline (shown in \emph{TBD}) %TODO: Reference appended interviews
+was created to aid in getting back to key points during interviews so that interviewees would not stray too far from the relevant points. The guideline also served as a checklist so the interviewer could make sure that all questions and points that initially should be covered, were in fact covered by the end of the interviews. It was composed of three sections:
+
+\paragraph{1. Experiences with IoT} The answers to these questions would give insights into what kind of applications the security researchers had worked on in the past. Answers to question \emph{1.1.} were of particular interest as they might represent what technologies were being examined by security researchers and may be popular in today’s applications.
+\paragraph{2. Processes in Everyday Life} This section aimed to cover questions about the processes and tasks security researchers perform during penetration tests of IoT applications in their everyday life. Ideally, answers to those questions would show the approaches taken and challenges faced during their work, uncovering potential needs and underlying motivation.
+\paragraph{3. The Future of IoT} This section had security researchers assess what the future of IoT may be like from their point of view. This required the interviewees to make a critical assessment of the status quo.
+
+%The experience gained from implementing the prototype in \ref{sec:prototypical-implementation} greatly influenced the creation of this guideline. For example question \emph{1.3. Were there any special constrains (e.g. real-time systems) when working with them?} 
+
+%Some of the questions in these sections originated from or were influenced by experience gained when implementing the prototype proxy application in \ref{sec:prototypical-implementation}. 
+
+\subsection{Conducting Interviews}
+Interviews were conducted with six %Patrick, Cédric, Théo, Oliver, Pierre
+\emph{NVISO} employees that all had worked on security assignments on \ac{IoT} or \ac{IIoT} applications in the past. There is considerable variety in
+\begin{itemize}
+    \item the experience they had in working on security assignments in general: all interviewees had a strong background in cyber security that reached back multiple years except one who was a working student at \emph{NVISO Labs}.
+    \item and the experience they had in working on \ac{IoT}/\ac{IIoT} applications: two interviewees worked on assessing \ac{IoT}/\ac{IIoT} applications only occasionally, one was part of a car manufacturer's automotive security team and three were part of \emph{NVISO Labs} and worked with smart devices on a regular basis.
+    % Position? CEO vs. Consultant vs. Werkstudent
+    % 
+\end{itemize}
+The duration of the interviews varied from 45 minutes to two hours depending on the amount and level of detail of information provided by the interviewees and the number of times that the interviewer had to ask further questions.
+
+\emph{TBD: Summary of the interviews and conclusions drawn + personas and use cases}
+
+\section{Analysis of Existing Software}
+\emph{TBD; planned: paragraph about each program including a general description, uses, capabilities and usefulness} %TODO
+\label{sec:analysis-existing-software}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{r|c|c|c|c|c|c}
+        \toprule
+              \thead{$Name$} & \thead{$Latest Release$} & \thead{$Language$} & \thead{$Protocols$} & \thead{$R$} & \thead{$W$} & \thead{$D$} \\
+        \midrule
+            Wireshark & 2020-07-01 & C & Various & \cellcolor{green!25}Y & \cellcolor{red!25}N & \cellcolor{green!25}Y \\
+        \midrule
+            MITMf & 2015-08-28 & Python & Various & ? & \cellcolor{green!25}Y & \cellcolor{green!25}Y  \\ %https://github.com/byt3bl33d3r/MITMf
+        \midrule
+            Ettercap & 2019-07-01 & C & Various & \cellcolor{green!25}Y & \cellcolor{green!25}Y & \cellcolor{green!25}Y  \\
+        \midrule
+            bettercap & 2020-03-13 & Go & Various & \cellcolor{green!25}Y & \cellcolor{green!25}Y  & \cellcolor{green!25}Y \\
+        \midrule
+            mitmproxy & 2020-03-13 & Python & HTTP/S, WS & ? & \cellcolor{green!25}Y & - \\ %https://github.com/mitmproxy/mitmproxy
+        \midrule
+            mProxy & Pre-Releases only & Go & MQTT & ? & \cellcolor{green!25}Y & - \\ %https://github.com/mainflux/mproxy
+        \bottomrule
+    \end{tabular}
+    %\begin{tabular}{ | r | c | c | c | c | c | c |} 
+        %\hline
+        %Name & Latest Release & Language & Protocols & S & D & M \\ %Sniffing, Dissecting, Manipulation
+        %\hline
+        %\hline
+        %Wireshark & 2020-07-01 & C & Various & \cellcolor{green!25}Y & \cellcolor{green!25}Y & \cellcolor{red!25}N \\ %https://code.wireshark.org/review
+        %\hline
+        %MITMf & 2015-08-28 & Python & Various & - & \cellcolor{green!25}Y & \cellcolor{green!25}Y  \\ %https://github.com/byt3bl33d3r/MITMf
+        %\hline
+        %Ettercap & 2019-07-01 & C & Various & \cellcolor{green!25}Y & \cellcolor{green!25}Y & \cellcolor{green!25}Y  \\ %https://github.com/Ettercap/ettercap
+        %\hline
+        %bettercap & 2020-03-13 & Go & Various & \cellcolor{green!25}Y & \cellcolor{green!25}Y & \cellcolor{green!25}Y  \\ %https://github.com/bettercap/bettercap/releases
+        %\hline
+        %mitmproxy & 2020-03-13 & Python & HTTP/S, WS & - & -  & \cellcolor{green!25}Y \\ %https://github.com/mitmproxy/mitmproxy
+        %\hline
+        %mProxy & Pre-Releases only & Go & MQTT & - & - & \cellcolor{green!25}Y \\ %https://github.com/mainflux/mproxy
+        %\hline
+    %\end{tabular}
+    \caption[Comparison of existing software]{Comparison of existing software where $R$, $W$ and $D$ describe read, write and deletion capabilities, respectively.}
+    \label{table:comparison-existing-software}
+\end{table}

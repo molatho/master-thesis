@@ -1,5 +1,39 @@
+% 1. Einführung
 \chapter{Introduction}
+\label{chap:introduction}
+This chapter will introduce the underlying motivation of this thesis. Then, it will give an overview of this thesis' purpose and structure. Lastly, this chapter will show the process that the work on this thesis went through, explaining the scientific methods applied and software engineering practices used.
 
 \section{Motivation}
-Test\cite{Ledwaba2019}
+% Copied from research proposal lol
+Today scientific and industrial parties work on connecting physical entities such as machines, buildings and even humans to the internet by equipping them with digital sensors and actuators, referred to as \enquote{\ac{IoT}}. While this progression promises many positive effects, such as simplifying tasks in our personal day-to-day life (\enquote{Smart Home} applications), monitoring our personal health (\enquote{eHealth}) %TODO: Medical IoT?
+and increasing efficiency and safety of industrial plants (\enquote{\ac{IIoT}}, also referred to as \enquote{Industry 4.0}), it also yields the risk of introducing new attack-vectors to parts of our environment: \enquote{smart} devices used at home or at other sensitive places may implement weak security implementations or faulty security design, resulting in private and personal data being available to parties interested in violating the privacy of one's home (e.g. vaccum robots leaking information about the interior design of homes\cite{wittenhorst_2019}) or conducting industrial espionage which is an acute threat \cite[p.~14]{bartsch_gentemann_kob_krösmann_mille_petri_ritter_rost_schmidt_schulz_2018}.\\
+The diversity of both deployed smart devices and the internet services those devices are connected to lead to the need and use of ever-increasing complex technologies used for communication, data storage and access management, further adding to potential attack-vectors of connected devices and distributed applications \cite[p.~119]{Jäger_Schöllhammer_Lickefett_Bauernhansl_2016}.
+This complexity and the sheer number of connected devices is actively being exploited by attackers today and the number of attacks on \ac{IoT} devices is increasing \cite{demeter_preuss_shmelev_2019}.\\
+There are security guidelines, best practices and innovative approaches for developing secure smart applications \cite[p.~120]{Jäger_Schöllhammer_Lickefett_Bauernhansl_2016}\cite[p.326-328]{Lesjak2016}, however testing such applications proves to be cumbersome: %TODO: cite to security guidelines
+intercepting, dissecting, inspecting and manipulating the communication in these applications requires working on various abstraction layers. In order to evaluate the security of such applications, penetration testers often spend a considerable amount of time dissecting applications and setting up a test-environment.\\
+The goal of this thesis is to conceptualize, implement and evaluate a modular proxy application that allows to evaluate the security of \ac{IoT} applications by... %TODO; umformulieren
+% examining security analysis processes of \ac{IoT} applications.
+
 \section{Purpose and Structure of the Thesis}
+This thesis is separated into eight chapters: chapter (\ref{chap:related-work}) will give an overview of and discuss related and previous work. After that, relevant fundamentals about computer networks, \ac{IoT} applications and information security will be covered in chapter \ref{chap:theoretical-background}.\\
+The chapters \ref{chap:understanding-the-problem-space} to \ref{chap:evaluation} describe the research and development process of the \ac{IoT} proxy application in chronological order: the problem space of the application is shown and dissected in chapter \ref{chap:understanding-the-problem-space}, yielding essential insights into potential challenges and technical requirements. Building upon these, the conceptual design of the \ac{IoT} proxy application is proposed in chapter \ref{chap:conceptual-design}, including the process of collecting, documenting and analysing of software requirements, describing the application's work context and designing a software architecture that complies with the aforementioned requirements. Subsequently, chapter \ref{chap:implementation} involves a prototypical implementation of the aforementioned software concept, focusing on the goals and constraints of the implementation, the tools and frameworks used and the implementation of core components of the application.\\
+The prototype is then evaluated in chapter \ref{chap:evaluation} by conducting and examining two case studies that show how the \ac{IoT} proxy application can be used in real-life scenarios, allowing insights in the efficiency or inefficiency of its use. Lastly, the results yielded by this thesis are summarized in chapter \ref{chap:summary} and the thesis is concluded in chapter \ref{chap:conclusion}. 
+%TODO: summary + conclusion
+
+%\section{Research and Development Process}
+%The chapters \ref{chap:understanding-the-problem-space} to \ref{chap:evaluation} describe the research and development process in chronological order: understanding the problem space (chapter \ref{chap:understanding-the-problem-space}) was a prerequisite, yielding relevant and important insights about challenges and constraints in the application's context. Building upon this, a conceptual design was conceived in chapter \ref{chap:conceptual-design}, providing the necessary software requirements and architecture for development of a functional prototype. Imp%TODO: WTF
+
+%The work on this thesis was split into four stages: in order to develop a proper understanding of the problem space
+
+%\paragraph{1. Discovering the Problem Space}
+%\label{ch:01-problem-space}
+%A proper understanding of the problem space was a prerequisite for the work on a conceptual design and functional prototype. In order to develop this understanding, 
+
+%\paragraph{2. Designing a Concept}
+%\label{ch:01-concept}
+
+%\paragraph{3. Implementing a Functional Prototype}
+%\label{ch:01-prototype}
+
+%\paragraph{4. Evaluating the Concept and Prototype}
+%\label{ch:01-evaluation}

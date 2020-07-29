@@ -34,12 +34,13 @@
    \usepackage[pagebackref=false,english]{hyperref}  % Hyperlinks
    \newcommand{\hsmasortlocale}{en_US} % Sortierung der Literatur
   }%
-
+\usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
 \usepackage{xcolor}               % Unterstützung für Farben
 \usepackage{amsmath}              % Mathematische Formeln
 \usepackage{amsfonts}             % Mathematische Zeichensätze
 \usepackage{amssymb}              % Mathematische Symbole
 \usepackage{float}                % Fließende Objekte (Tabellen, Grafiken etc.)
+\usepackage{makecell}
 \usepackage{booktabs}             % Korrekter Tabellensatz
 \usepackage[printonlyused]{acronym}  % Abkürzungsverzeichnis [nur verwendete Abkürzungen]
 \usepackage{makeidx}              % Sachregister
@@ -57,18 +58,19 @@
 \usepackage{tabularx}             % Spezielle Tabellen
 \usepackage[backend=biber,
   isbn=false,                     % ISBN nicht anzeigen, gleiches geht mit nahezu allen anderen Feldern
-  sortlocale=\hsmasortlocale,     % Sortierung der Einträge für Deutsch
+  sortlocale=en_EN,     % Sortierung der Einträge für Deutsch
                                   %      de_DE: für Deutsch
                                   %      en_US: für Englisch
   autocite=inline,                % regelt Aussehen für \autocite
                                   %      inline: Zitat in Klammern (\parancite)
                                   %      footnote: Zitat in Fußnoten (\footcite)
                                   %      plain: Zitat direkt ohne Klammern (\cite)
-  style=authoryear,               % Legt den Stil für die Zitate fest
+  style=numeric,               % Legt den Stil für die Zitate fest
                                   %      ieee: Zitate als Zahlen [1]
                                   %      alphabetic: Zitate als Kürzel und Jahr [Ein05]
                                   %      authoryear: Zitate Author und Jahr [Einstein (1905)]
   hyperref=true,                  % Hyperlinks für Zitate
+  citestyle=numeric,
   firstinits=false                % Vornamen abkürzen (Maier, M. anstatt Maier, Markus)?
                                   %      true: abkürzen
                                   %      false: nicht abkürzen
