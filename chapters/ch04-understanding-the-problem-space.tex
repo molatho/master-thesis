@@ -37,15 +37,23 @@ The duration of the interviews varied from 45 minutes to two hours depending on 
 \emph{TBD: Summary of the interviews and conclusions drawn + personas and use cases}
 
 \section{Analysis of Existing Software}
+\paragraph{Wireshark} 3,690,000 lines of code\footnote{This number was returned by the \emph{cloc} utility run on commit \emph{3a8111e1c2adcdc0603993c6ed5d20a40f162125} of Wireshark's Github mirror.}\emph{TBD}
+\paragraph{MITMf} \emph{TBD}
+\paragraph{Ettercap} \emph{TBD}
+\paragraph{bettercap} \emph{TBD}
+\paragraph{mitmproxy} \emph{TBD}
+\paragraph{mProxy} \emph{TBD}
+\paragraph{IOXY} \emph{TBD}
+
 \emph{TBD; planned: paragraph about each program including a general description, uses, capabilities and usefulness} %TODO
 \label{sec:analysis-existing-software}
 \begin{table}[h]
     \centering
     \begin{tabular}{r|c|c|c|c|c|c}
         \toprule
-              \thead{$Name$} & \thead{$Latest Release$} & \thead{$Language$} & \thead{$Protocols$} & \thead{$R$} & \thead{$W$} & \thead{$D$} \\
+              \thead{$Name$} & \thead{$Latest$\\$Release$} & \thead{$Implemented$\\$in$} & \thead{$Supported$\\$Protocols$} & \thead{$R$} & \thead{$W$} & \thead{$D$}\\
         \midrule
-            Wireshark & 2020-07-01 & C & Various & \cellcolor{green!25}Y & \cellcolor{red!25}N & \cellcolor{green!25}Y \\
+            Wireshark & 2020-07-01 & C & Various & \cellcolor{green!25}Y & \cellcolor{red!25}N & \cellcolor{red!25}N \\
         \midrule
             MITMf & 2015-08-28 & Python & Various & ? & \cellcolor{green!25}Y & \cellcolor{green!25}Y  \\ %https://github.com/byt3bl33d3r/MITMf
         \midrule
@@ -53,29 +61,13 @@ The duration of the interviews varied from 45 minutes to two hours depending on 
         \midrule
             bettercap & 2020-03-13 & Go & Various & \cellcolor{green!25}Y & \cellcolor{green!25}Y  & \cellcolor{green!25}Y \\
         \midrule
-            mitmproxy & 2020-03-13 & Python & HTTP/S, WS & ? & \cellcolor{green!25}Y & - \\ %https://github.com/mitmproxy/mitmproxy
+            mitmproxy & 2020-03-13 & Python & HTTP/S, WS & \cellcolor{orange!25}P & \cellcolor{orange!25}P & \cellcolor{orange!25}P \\ %https://github.com/mitmproxy/mitmproxy
         \midrule
             mProxy & Pre-Releases only & Go & MQTT & ? & \cellcolor{green!25}Y & - \\ %https://github.com/mainflux/mproxy
+        \midrule
+            IOXY & Source only & Go & MQTT & \cellcolor{green!25}Y & \cellcolor{green!25}Y & \cellcolor{green!25}Y \\ %https://github.com/mainflux/mproxy
         \bottomrule
     \end{tabular}
-    %\begin{tabular}{ | r | c | c | c | c | c | c |} 
-        %\hline
-        %Name & Latest Release & Language & Protocols & S & D & M \\ %Sniffing, Dissecting, Manipulation
-        %\hline
-        %\hline
-        %Wireshark & 2020-07-01 & C & Various & \cellcolor{green!25}Y & \cellcolor{green!25}Y & \cellcolor{red!25}N \\ %https://code.wireshark.org/review
-        %\hline
-        %MITMf & 2015-08-28 & Python & Various & - & \cellcolor{green!25}Y & \cellcolor{green!25}Y  \\ %https://github.com/byt3bl33d3r/MITMf
-        %\hline
-        %Ettercap & 2019-07-01 & C & Various & \cellcolor{green!25}Y & \cellcolor{green!25}Y & \cellcolor{green!25}Y  \\ %https://github.com/Ettercap/ettercap
-        %\hline
-        %bettercap & 2020-03-13 & Go & Various & \cellcolor{green!25}Y & \cellcolor{green!25}Y & \cellcolor{green!25}Y  \\ %https://github.com/bettercap/bettercap/releases
-        %\hline
-        %mitmproxy & 2020-03-13 & Python & HTTP/S, WS & - & -  & \cellcolor{green!25}Y \\ %https://github.com/mitmproxy/mitmproxy
-        %\hline
-        %mProxy & Pre-Releases only & Go & MQTT & - & - & \cellcolor{green!25}Y \\ %https://github.com/mainflux/mproxy
-        %\hline
-    %\end{tabular}
-    \caption[Comparison of existing software]{Comparison of existing software where $R$, $W$ and $D$ describe read, write and deletion capabilities, respectively.}
+    \caption[Comparison of existing software]{Comparison of existing software where $R$, $W$ and $D$ describe read, write and deletion capabilities, respectively. $Y$, $N$ and $P$ indicate full, no or partial functionality, respectively.}
     \label{table:comparison-existing-software}
 \end{table}
