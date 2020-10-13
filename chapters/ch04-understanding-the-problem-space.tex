@@ -5,7 +5,7 @@ In order to provide a satisfying solution to the problem at hand, the problem it
 
 \section{Prototypical Implementation}
 \label{sec:prototypical-implementation}
-The prototype was designed to be able to handle two scenarios; a simple and a complex one. Complexity was evaluated by the amount of communication protocols and steps involved. The goal of this section was to implement a prototype that could be used to intercept communication between an \ac{IoT} device and its cloud service as shown in figure \ref{fig:network-communication-diagrams}.   
+The prototype was designed to be used in two realistic scenarios; one in an \ac{ICS} context and a more complex one in a cloud context. Complexity was evaluated by the amount of communication protocols and steps involved. The goal of this section was to implement a prototype that could be used to intercept communication between an \ac{IoT} device and its cloud service as shown in figure \ref{fig:network-communication-diagrams}.   
 
 \begin{figure}%
     \centering
@@ -16,14 +16,13 @@ The prototype was designed to be able to handle two scenarios; a simple and a co
     \label{fig:network-communication-diagrams}%
 \end{figure}
 
-\subsection{Simple Scenario: ICS Modbus TCP}
-% Hardware Setup
-% Communication
+\subsection{Example Senarios}
+The following scenarios describe realistic configurations of \ac{IoT}/\ac{IIoT} devices that should be tested with the prototype:
+\paragraph{Scenario \#1: \ac{ICS} Modbus \ac{TCP}}
+In \ac{IIoT} this scenario, a \ac{HMI} (\emph{Siemens KTP400 Basic}) sends commands to and receives data from a \ac{PLC} (\emph{Siemens S7-1200}) using Modbus \ac{TCP}. The \ac{PLC} continually counts up a value up to 100 and begins anew at zero while the \ac{HMI} displays the current value and provides a button that, upon being pressed by a user, resets the current value to zero.   
+Due to the rather simple nature of the Modbus \ac{TCP} protocol, intercepting and manipulating communication is expected to be trivial.
 
-\subsection{Complex Scenario: AWS IoT}
-% Hardware Setup
-% Communication
-
+\paragraph{Scenario \#2: \ac{AWS} \ac{IoT}} This \ac{IoT} cloud scenario utilizes a local \ac{IoT} device that is integrated into the \ac{AWS} \ac{IoT} platform. The device connects to the cloud platform %TODO: CONTINUE
 
 
 \subsection{Requirements}
@@ -46,15 +45,15 @@ The following non-functional requirements were defined:
 
 \begin{itemize}
     \item [\textbf{N1}] \textbf{Extensibility:} To allow for future implementation of further communication protocols the software shall be implemented in a modular fashion.
-    \item [\textbf{N2}] \textbf{Platform Compatibility:} In order to support a broad spectrum of target platforms, the software shall be implement plattform-independently.
+    \item [\textbf{N2}] \textbf{Platform Compatibility:} In order to support a broad spectrum of target platforms, the software shall be implemented plattform-independently.
 \end{itemize}
 
-Due to this implementation serving as a prototype and being of an academic nature, no specific constraints were defined. It was developed strictly ignoring aspects of usability and stability as it should not be used in production environments but in laboratories exclusively.
+Due to this implementation serving as a prototype and being of an academic nature, no specific constraints were defined. It was to be developed strictly ignoring aspects of usability and stability as it should not be used in production environments but in laboratories exclusively.
 
 \subsection{Design}
 % Overall
 % Network Stack
-\begin{figure}[t]
+\begin{figure}[h]
     \centering
     \includegraphics[width=6cm]{img/ch04/Architecture - Pipes and Filters.pdf}
     \captionof{figure}{Statemachine of \ac{AWS} \ac{IoT} communication}
@@ -64,7 +63,7 @@ Due to this implementation serving as a prototype and being of an academic natur
 % TODO: References Pipes & Filters \ref{fig:app-diag-pipesfilters-1} \ref{fig:app-diag-pipesfilters-2}
 
 % Statemachine
-\begin{figure}[t]
+\begin{figure}[h] 
     \centering
     \includegraphics[width=6cm]{img/ch04/Statemachine 2.pdf}
     \captionof{figure}{Statemachine of \ac{AWS} \ac{IoT} communication}
