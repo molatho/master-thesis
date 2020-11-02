@@ -1,0 +1,11 @@
+{
+    "discord.enabled": true,
+    "spellright.language": [
+        "English (British)"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ]
+}
