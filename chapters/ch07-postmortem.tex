@@ -1,0 +1,17 @@
+% 6. Post-Mortem 
+\chapter{Postmortem Documentation}
+\label{chap:postmortem}
+This chapter attempts to identify and spell out the causes of the project failure. The project timeline will allow a quantitative overview of the project progression and show what parts of the project slowed down progress. Then, an overview of the qualitative aspects of the deliverables will discuss the maturity of the implementation and which parts reached a satisfactory level.
+
+\section{Quantitative: Project Timeline}
+\label{sec:project-timeline}
+\emph{TBD: Overview of the project timeline: here we will see that implementation went out of control and took too much time. Feature reduction came too late and too few. Also, discuss additional problems that took up much time:}
+\begin{itemize}
+    \item \emph{Race-conditions: newly arrived messages could change states in state-machines, decoupling network stacks and causing currently processed messages that were processed up to raise null pointer exceptions.}
+    \item \emph{Poor documentation: some open-source libraries (e.g. python's \ac{WS} library) were poorly documented, resulting in days worth of diving through source code.}
+    \item \emph{Time-consuming debugging: testing scenario \# 2 meant loading a large configuration file, resulting in dynamic and long pipelines and interweaving of multiple state-machines and pipelines. Tracing messages became very time-consuming and confusing.}
+\end{itemize}
+
+\section{Qualitative: Deliverables}
+\label{sec:tool-selection}
+\emph{TBD: Which fit-criteria were met? What is the implementation currently capable of? Which requirements were not full-filled?}

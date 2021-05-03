@@ -1,7 +1,8 @@
 {
     "discord.enabled": true,
     "spellright.language": [
-        "English (British)"
+        "de_DE",
+        "en_GB"
     ],
     "spellright.documentTypes": [
         "markdown",

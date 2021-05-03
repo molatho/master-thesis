@@ -5,20 +5,47 @@ This chapter covers an exemplaric implementation of the concept that was worked 
 
 \section{Goals and Constraints}
 \label{sec:goals-constraints}
+\emph{TBD} %TODO: Write out
+\begin{itemize}
+    \item \emph{Focus on complex scenario \#2: HTTP, WS, MQTT}
+    \item \emph{No interactive mode}
+    \item \emph{Fully implement factories, state-machines and netstacks}
+\end{itemize}
 
 \section{Tool Selection}
 \label{sec:tool-selection}
 
 \subsection{Requirements to The Tools}
-\subsection{Comparison of Modern Tools and Toolchains}
+\emph{TBD} %TODO: Write out
+\begin{itemize}
+    \item \emph{Needs to run cross-platform}
+    \item \emph{Low-level access to APIs}
+    \item \emph{Rich set of low-level libraries for protocol implementations}
+    \item \emph{Accessible and easily extendable}
+\end{itemize}
+
+\subsection{Comparison of Programming Languages, Frameworks and Libraries}
+\emph{TBD: Discuss how the candidates match the above-mentioned criteria and point out why python was chosen} %TODO: Write out
+\begin{itemize}
+    \item \emph{Native C: Win32 API / Linux ABI}
+    \item \emph{.NET Visual C\# \& NuGet}
+    \item \emph{JavaScript/TypeScript \& npm}
+    \item \emph{Python \& pip}
+\end{itemize}
 
 \section{Individual Components}
 \label{sec:individual-components}
 
+\subsection{Network Stack}
+\subsubsection{Gateways}
+\subsubsection{Pipes, Encoders and Processors}
+\subsubsection{Scripting}
+\subsubsection{Pipelines}
+
 \subsection{Finite State Machine}
 \subsubsection{States}
 \subsubsection{Transitions}
+\subsubsection{Nested \acp{FSM}}
+
 \subsection{Configuration Parsing and Building}
-\subsubsection{Factories and Builders}
-\subsection{Network Stack}
-\subsubsection{Managing Flow of Traffic}
+\subsubsection{Factories, Builders and Templates}

@@ -1,22 +1,41 @@
 % 4. Konzept (Kontext, Ablauf, Anforderungen [Interviews], Konzept [Architektur])
 \chapter{Conceptual Design}
 \label{chap:conceptual-design}
-This chapter will detail the process of conceptualizing the design of the modular proxy application based on the results of the preceding chapter. First, the requirements are analyzed for their potential design implications in section \ref{sec:req-design-implications}. Afterwards the user interactions and domain entities identified in chapter \ref{chap:understanding-the-problem-space} are examined and broken down into communication flows between actors and systems in section \ref{sec:user-interactions-designing-workflow} and individual software components that complete the design are discussed in section \ref{sec:inferring-software-components}. Lastly, an overview of the complete design concept is given in section \ref{sec:abstract-design-concept}, discussing potential advantages and constraints.
+This chapter will detail the process of conceptualizing the design of the modular proxy application based on the results of the preceding chapter. First, the requirements are analysed for their potential design implications in section \ref{sec:req-design-implications}. Afterwards the user interactions and domain entities identified in chapter \ref{chap:understanding-the-problem-space} are examined and broken down into communication flows between actors and systems in section \ref{sec:user-interactions-designing-workflow} and individual software components that complete the design are discussed in section \ref{sec:inferring-software-components}. Lastly, an overview of the complete design concept is given in section \ref{sec:abstract-design-concept}, discussing potential advantages and constraints.
 
 \emph{Note: sections \ref{sec:req-design-implications} and \ref{sec:user-interactions-designing-workflow} should probably be merged as they overlap a lot} %TODO
 
 \section{Requirements: Design Implications}
 \label{sec:req-design-implications}
 \emph{TBD} %TODO
+\begin{itemize}
+    \item \emph{Stream-based: treat communication as streams. message-based systems are simpler and supported by design}
+    \item \emph{Server-client: proxy is server, client can interface to control + monitor, communication via REST + WS}
+\end{itemize}
 
 \section{User Interactions: Designing the Intended Workflow}
 \label{sec:user-interactions-designing-workflow}
 \emph{TBD} %TODO
+\begin{itemize}
+    \item \emph{Passive: Logging}
+    \item \emph{Passive: Scripting}
+    \item \emph{Passive: Fuzzing}
+    \item \emph{(Inter-)Active: REST+WS or Burp Suite integration}
+\end{itemize}
 
 \section{Inferring Software Components}
 \label{sec:inferring-software-components}
 \emph{TBD} %TODO
+\begin{itemize}
+    \item \emph{State-machine: active network stack/pipeline dependent on state of the connection}
+    \item \emph{NetStacks: series of pipelines, bound to states}
+    \item \emph{Pipes: basic pipes, loose routing, injectable, specialized, generic processors + specialized encoders}
+    \item \emph{Factory: parse state-machine and netstack configuration and instantiate + configure instances}
+\end{itemize}
 
 \section{Summary: An Abstract Design Concept}
 \label{sec:abstract-design-concept}
-\emph{TBD} %TODO
+\emph{TBD (maybe obsolete as this is covered in preceding sections)} %TODO
+\begin{itemize}
+    \item \emph{Component view?}
+\end{itemize}
