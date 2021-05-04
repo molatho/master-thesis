@@ -4,9 +4,10 @@
 This chapter attempts to identify and spell out the causes of the project failure. The project timeline will allow a quantitative overview of the project progression and show what parts of the project slowed down progress. Then, an overview of the qualitative aspects of the deliverables will discuss the maturity of the implementation and which parts reached a satisfactory level.
 
 \section{Quantitative Overview: Time Management}
+\label{sec:pm-time-management}
 Comparing the planned thesis schedule to the actual course it has taken, this section discusses how the intended plan was implemented and changed at certain places. Also, it will examine the causes of the delays during development.
-\label{sec:project-timeline}
 \subsection{Project timeline}
+\label{sec:project-timeline}
 Table \ref{fig:thesis-schedule} shows the initially planned thesis schedule divided into four phases, laying out the course of the thesis over a span of 24 weeks.
 
 \begin{table}
@@ -15,19 +16,19 @@ Table \ref{fig:thesis-schedule} shows the initially planned thesis schedule divi
         \toprule
         Phase / Task             & Duration              \\
         \midrule
-        1. Preparation           & $4$ weeks ($16,67\%$) \\
+        1. Preparation           & $4$ weeks ($16,66\%$) \\
         \midrule
         Literature Research      & $1$ week              \\
         Expert Interviews        & $1$ week              \\
         Testbed Configuration    & $2$ weeks             \\
         \midrule
-        2. Prototype             & $7$ weeks ($29,17\%$) \\
+        2. Prototype             & $7$ weeks ($29,16\%$) \\
         \midrule
         Prototype Conception     & $2$ weeks             \\
         Prototype Implementation & $4$ weeks             \\
         Expert Feedback          & $1$ week              \\
         \midrule
-        3. Release Candidate     & $7$ weeks ($29,17\%$) \\
+        3. Release Candidate     & $7$ weeks ($29,16\%$) \\
         \midrule
         RC Conception            & $2$ weeks             \\
         RC Implementation        & $4$ weeks             \\
@@ -39,17 +40,17 @@ Table \ref{fig:thesis-schedule} shows the initially planned thesis schedule divi
         Thesis Finalization      & $4$ weeks             \\
         \midrule
         \midrule
-        Total                    & $24$ weeks            \\
+        \emph{Total}             & \emph{$24$ weeks}     \\
         \bottomrule
     \end{tabular}
     \caption{Initially planned schedule for the thesis}
     \label{fig:thesis-schedule}
 \end{table}
 
-\paragraph{1. Preparation} The initial phase covered preparation tasks for further work on the thesis. Literature research on the topics covered and touched in this thesis was carried out. Related work on \ac{IoT} and \ac{ICS} security analysis (as discussed in chapter \ref{chap:related-work} were of special interest as those showed what approaches had been taken to assess security implementations. Also, a testbed (shown in \ref{sec:prototype-testing} for running the proxy application was built. A decision was made against conducting expert interviews before implementing a first prototype on the basis that practical experience with the subject matter could benefit the expert interviews. The fact that a number of important questions arose from work on the first prototype later proved this decision to be correct. Performing the literature research and building testbed was completed within the intended schedule of three weeks.
+\paragraph{1. Preparation} The initial phase covered preparation tasks for further work on the thesis. Literature research on the topics covered and touched in this thesis was carried out. Related work on \ac{IoT} and \ac{ICS} security analysis (as discussed in chapter \ref{chap:related-work}) was of special interest as those showed what approaches had been taken to assess security implementations. Also, a testbed (shown in \ref{sec:prototype-testing} for running the proxy application was built. A decision was made against conducting expert interviews before implementing a first prototype on the assumption that practical experience with the subject matter would benefit the expert interviews. The fact that a number of important questions arose from work on the first prototype later proved this decision to be correct. Performing the literature research and building a testbed was completed within the intended schedule of three weeks.
 \paragraph{2. Prototype} In the second phase, the prototype discussed in section \ref{sec:prototypical-implementation} was designed and implemented in weekly sprints. Preceding these sprints, a rough design of the prototype's architecture and runtime behaviour was worked out in one week that would serve as a base for further design refinement and implementation in the sprints. These sprints ran for eight weeks in total: the initial design turned out to be too oversimplified so that sprints aiming to design and implement specific components were conducted rather isolated from other components that still needed to be worked on. As a result, both the integration of individual components and their interaction would fail and require redesigns and time-consuming adjustments to their implementation. Also, neither was the prototype mature enough to be used as a proxy application, nor was the resulting design and implementation clean enough to suggest putting further effort into working on them. After these eight sprints, work on this prototype was stopped and the expert interviews discussed in section \ref{sec:interviews} were prepared and conducted.
-\paragraph{3. Release Candidate} The third phase was intended to yield a fully functional proxy application. This was initiated by switching the technology stack from TypeScript to Python and re-designing and re-implementing large parts of the first prototype. In order to avoid the same mistake of refining a vague design concept and spending time adjusting the design and implementation to make them work, two weeks were spent on a new design concept shown in section \ref{sec:abstract-design-concept}. This concept did not only define single components (discussed in section \ref{sec:individual-components}) but also interfaces that specified how those components interacted with each other, aiming for clear separation of components and high flexibility in implementation. Components of the prototype that were independent of the communication protocols used at runtime, such as NetStacks and \acp{FSM}, were implemented first over the span of four weeks. Then, implementations for supporting the \ac{HTTP}, \ac{WS} and \ac{MQTT} protocols followed over a span of another six weeks. Work on this prototype was stopped after those ten weeks as the technical difficulties discussed in paragraph \ref{par:challenges} made estimations over the remaining time needed to finish the prototype both hard to make and rather unreliable.
-\paragraph{4. Finalization} The final phase was intended to conduct a case study on how the proxy application would perform on scenario \# 2 from section \ref{sec:example-scenarios}. Tests were made to run the proxy application in the testbed shown in section \ref{sec:prototype-testing} which featured the same communication protocols that were used in scenario \# 2. However, the proxy application failed to reliably transmit or encode the messages sent between the \ac{MQTT} client and broker, thus resulting in a broken communication channel. The complex runtime behaviour and very time-consuming debugging of the proxy application (further elaborated on in paragraph \ref{par:challenges}) lead to the decision to stop the project.
+\paragraph{3. Release Candidate} The third phase was intended to yield a fully functional proxy application. This was initiated by switching the technology stack from TypeScript to Python and re-designing and re-implementing large parts of the first prototype. In order to avoid the same mistake of refining a vague design concept and spending time adjusting the design and implementation to make them work, two weeks were spent on a new design concept shown in section \ref{sec:abstract-design-concept}. This concept did not only define single components (discussed in section \ref{sec:individual-components}) but also interfaces that specified how those components interacted with each other, aiming for clear separation of components and high flexibility in implementation. Components of the prototype that were independent of the communication protocols used at runtime, such as NetStacks and \acp{FSM}, were implemented first over the span of four weeks. Then, implementations for supporting the \ac{HTTP}, \ac{WS} and \ac{MQTT} protocols followed over a span of another six weeks. Work on this prototype was stopped after those ten weeks as the technical difficulties discussed in section \ref{sec:pm-challenges} made estimations over the remaining time needed to finish the prototype both hard to make and rather unreliable.
+\paragraph{4. Finalization} The final phase was intended to conduct a case study on how the proxy application would perform on scenario \# 2 from section \ref{sec:example-scenarios}. Tests were made to run the proxy application in the testbed shown in section \ref{sec:prototype-testing} which featured the same communication protocols that were used in scenario \# 2. However, the proxy application failed to reliably transmit or encode the messages sent between the \ac{MQTT} client and broker, thus resulting in a broken communication channel. The complex runtime behaviour and very time-consuming debugging of the proxy application (further elaborated on in section \ref{sec:pm-challenges}) lead to the decision to stop the project.
 
 \begin{table}
     \centering
@@ -74,7 +75,7 @@ Table \ref{fig:thesis-schedule} shows the initially planned thesis schedule divi
         RC Implementation        & 10 weeks            \\
         \midrule
         \midrule
-        Total                    & 25 weeks            \\
+        \emph{Total}             & \emph{25 weeks}     \\
         \bottomrule
     \end{tabular}
     \caption{Actual schedule of the project}
@@ -83,16 +84,16 @@ Table \ref{fig:thesis-schedule} shows the initially planned thesis schedule divi
 
 Table \ref{fig:thesis-schedule-actual} shows the actual schedule of the thesis. As can be seen, $88\%$ ($22$ weeks) of the time working on the thesis was spent designing and implementing the prototypes compared to a planned portion of roughly $60\%$ ($14$ weeks).
 
-% Typescript prototype: mar2020
-% Python prototype: november2020-december2021
+% Typescript prototype: March 2020
+% Python prototype: November 2020 - December 2020
 
 \subsection{Development challenges}
-\label{par:challenges}
-There were a series of development challenges that slowed down implementation of both prototypes considerably:
-\paragraph{Complex runtime behaviour}
-\paragraph{Time-consuming debugging}
-\paragraph{Poor documentation}
-\paragraph{Race-conditions}
+\label{sec:pm-challenges}
+There was a series of development challenges that slowed down implementation of both prototypes considerably:
+\paragraph{Complex runtime behaviour} The combination of nested \acp{FSM} and pipelines lead to several problems during development. Even comparatively simple scenarios to use the proxy application in required a complete configuration file made of a global state machine and at least one netstack. This lead to a dynamic and long chain of references at runtime that made tracing back calls and attributing them to specific instances difficult.\\
+Some problems such as a timing problem in the implementation of \acp{FSM} were very time consuming to debug: an \ac{FSM} would change its state when any of its rules was evaluated successfully and indicated a state change. By design, all \acp{FSM} of an active netstack would evaluate their rules when a message entered or left any netstack. When a higher-level \ac{FSM} (e.g. the global state-machine) changed its state \emph{while} a message was still being processed in a lower-level \ac{FSM}, the higher-level state-machine would change to another netstack, thus disconnect the lower-level state-machine. Eventually, the message would be processed back up and run into a pipe that had no upstream connection anymore, raising an exception and terminating the program. This particular error was discovered during the implementation and testing of the \ac{MQTT} encoder, in a runtime setup that involved a global default state-machine with a default \ac{TCP} netstack and a state-machine that handled \ac{HTTP} to \ac{WS} upgrades and processed \ac{MQTT} messages utilizing netstacks for \ac{HTTP} and \ac{WS}/\ac{MQTT}.\\
+Other problems uncovered design flaws and required prompt changes to the software design or, in some cases, introduced new constraints to the project. One such example was discovered while testing the \ac{HTTP} encoder implementation using Mozilla FireFox as an \ac{HTTP} client. When browsing websites, the browser would open multiple connections to the target host to acquire multiple files at the same time\footnote{For testing single \ac{HTTP} connections, the key \emph{network.http.max-connections-per-server} could be set to $1$ in the \emph{about:config} page.}. This required the proxy application to instantiate a new pipeline per incoming connection rather than reside on using a single pipeline. Also, this broke the design intention of pipes being connected to at most one preceding and one succeeding pipe as at some point, the pipelines needed to connect back to the global state-machine. However, when multiple pipelines connected back to a single \ac{FSM} and the only objects pipes would connect to were other pipes, a multiplexing pipe needed to be implemented.
+\paragraph{Open source libraries} Both prototypes made use of open source libraries that implemented various protocols and included serialization and de-serialization routines for protocol specific packets. However, such libraries appeared to be intended to be used for developing applications that used those protocols as a means for transporting data rather than directly parsing packets. Usually, these libraries would offer an API that allowed to instantiate and operate clients and servers and bind callbacks to events. The implementation of serializing and de-serializing packets was often times hidden through encapsulation, missing typings or poorly documented. For instance, the JavaScript library \enquote{ws} provided methods for serialization and de-serialization but lacked typings\footnote{The version used for the TypeScript prototype was version 7.0.0, source code is available at https://github.com/websockets/ws.}. Typings for this library were made available by the project \enquote{DefinitelyTyped}, however those did not include the classes relevant for serialization and de-serialization (\emph{Sender} and \emph{Receiver})\footnote{As can be seen here: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/4bf23527293b2943c7fc12585c21473905a564d7/types/ws/index.d.ts}. At the time of implementing the python prototype, it used the library \enquote{websockets} that offered only an async de-serialization method\footnote{The python prototype used the library at commit 6b5cbaf41cdbc9a2074e357ccc613ef25517dd32: https://github.com/aaugustin/websockets/blob/6b5cbaf41cdbc9a2074e357ccc613ef25517dd32/src/websockets/framing.py} (\emph{framing.Frame.read}), requiring the use of asyncio which was circumvented by implementing a wrapper around it.
 
 % \begin{itemize}
 %     \item \emph{Complex runtime behaviour}
@@ -102,5 +103,5 @@ There were a series of development challenges that slowed down implementation of
 % \end{itemize}
 
 \section{Qualitative: Deliverables}
-\label{sec:tool-selection}
+\label{sec:pm-deliverables}
 \emph{TBD: Which fit-criteria were met? What is the implementation currently capable of? Which requirements were not full-filled?}
