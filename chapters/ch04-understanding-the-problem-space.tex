@@ -17,6 +17,7 @@ The prototype was designed to be used in two realistic scenarios; one in an \ac{
 \end{figure}
 
 \subsection{Example Scenarios}
+\label{sec:example-scenarios}
 The following scenarios describe realistic configurations of \ac{IoT}/\ac{IIoT} devices that should be tested with the prototype:
 
 \paragraph{Scenario \#1: \ac{ICS} Modbus \ac{TCP}}
@@ -56,10 +57,10 @@ To be able to operate in both of the aforementioned scenarios, the prototype had
           \textit{Fit criterion: TBD} %TODO: Write fit-criterion
     \item [\textbf{F2}] \textbf{Network Stacks:} The software must be able to parse protocols that are tunnelled through other protocols (\enquote{\emph{stacked}}). It must provide an interface to the user where they can specify which communication protocols are used and whether and how they are stacked (further referred to as \emph{network stack}).\\
           \textit{Fit criterion: The software processes a configuration file that lets users specify which protocols to be used and whether/how they are stacked.}
-    \item [\textbf{F3}] \textbf{State-Machines:} The software must be able to switch network stacks dependent on configurable \emph{states}. It must provide an interface for the user to specify when to switch to using another network stack, represented using \acp{FSM} and rule sets for transmission between states.\\
+    \item [\textbf{F3}] \textbf{State-Machines:} The software must be able to switch network stacks and scripts for processing dependent on configurable \emph{states} and \emph{transitions} between them. It must provide an interface for the user to specify when to switch to using another network stack, represented using \acp{FSM} and rule sets for transmission between states.\\
           \textit{Fit criterion: The software processes a configuration file that lets users specify when to switch between network stacks.}
     \item [\textbf{F4}] \textbf{Integration:} The software shall provide interfaces for integration of third-party software.\\
-          \textit{Fit criterion: The software allows sending requests/responses to \enquote{Burp Suite} for manipulation.}
+          \textit{Fit criterion: The software implements interfaces that allow sending packets to other applications such as \enquote{Burp Suite}.}
     \item [\textbf{F5}] \textbf{Scripting:} The software shall provide scripting capabilities for automated manipulation of messages/packets.\\
           \textit{Fit criterion: Users can define script-snippets to be executed on messages/packets.}
 \end{itemize}
@@ -107,6 +108,9 @@ There are extensions to basic pipes such as:
     \label{fig:design-pipes-and-filters}
 \end{figure}
 
+\subsection{Testing}
+\label{sec:prototype-testing}
+\emph{TBD: Show simple testbed made of development machine, MQTT/WS client and broker.}
 
 \subsection{Implementation}
 \emph{TBD:}  %TODO: Write out
@@ -161,13 +165,14 @@ The duration of the interviews varied from 45 minutes to two hours depending on 
 \end{itemize}
 
 \section{Analysis of Existing Software}
-\paragraph{Wireshark} 3,690,000 lines of code\footnote{This number was returned by the \emph{cloc} utility run on commit \emph{3a8111e1c2adcdc0603993c6ed5d20a40f162125} from Aug. 4th 2020 of Wireshark's Github mirror.}\emph{TBD}
+\paragraph{Wireshark} more than 3,400,000 lines of C code\footnote{This number was returned by the \emph{cloc} utility run on commit \emph{3a8111e1c2adcdc0603993c6ed5d20a40f162125} from Aug. 4th 2020 of Wireshark's Github mirror.}\emph{TBD}
 \paragraph{MITMf} \emph{TBD}
 \paragraph{Ettercap} \emph{TBD}
 \paragraph{bettercap} \emph{TBD}
 \paragraph{mitmproxy} \emph{TBD}
 \paragraph{mProxy} \emph{TBD}
 \paragraph{IOXY} \emph{TBD}
+\paragraph{scapy} \emph{TBD}
 
 \emph{TBD; planned: paragraph about each program including a general description, uses, capabilities and usefulness} %TODO: Write out
 \label{sec:analysis-existing-software}
