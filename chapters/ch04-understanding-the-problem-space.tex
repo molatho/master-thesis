@@ -127,21 +127,35 @@ There are extensions to basic pipes such as:
 
 \subsection{Testing}
 \label{sec:prototype-testing}
-To test the prototype, a simple testbed ({fig:testbed}) was designed and implemented to realize scenario \#3 (discussed in section \ref{sec:example-scenarios}). It consisted of two Debian 10 machines that acted as a \ac{MQTT} broker and clients and a Kali Linux machine that ran the prototype and provided tools such as Wireshark that could be used for debugging and monitoring network traffic. All machines were connected to a single network and were assigned static \ac{IP} addresses. While this setup allowed for more sophisticated proxy mechanisms such as \ac{ARP} spoofing, the decision was made to directly connect the \ac{MQTT} clients to the \emph{kali} machine to reduce complexity and accelerate and simplify testing.\par
-The \ac{MQTT} broker software used on the \emph{broker} machine was Eclipse Mosquitto\footnote{https://mosquitto.org/} $1.5.7$ from the Debian package repositories, the \ac{MQTT} clients running on the \emph{client} machine were implemented in Python using the Eclipse Paho implementation for Python (paho-mqtt\footnote{https://pypi.org/project/paho-mqtt/}). %TODO: Describe publish and processing pattern, ref mqtt graph below
-
+To test the prototype, a simple testbed was designed and implemented to realize scenario \#3 (discussed in section \ref{sec:example-scenarios}). It consisted of two Debian 10 machines that acted as a \ac{MQTT} broker and clients and a Kali Linux machine that ran the prototype and provided tools such as Wireshark that could be used for debugging and monitoring network traffic. All machines were connected to a single network (shown in figure \ref{fig:testbed}) and were assigned static \ac{IP} addresses. While this setup allowed for more sophisticated \ac{MITM} mechanisms such as \ac{ARP} spoofing, the decision was made to directly connect the \ac{MQTT} clients to the \emph{kali} machine to reduce complexity and accelerate and simplify testing. Separate machines were used for the \ac{MQTT} broker and clients so that actual \ac{MITM} attacks could be performed if the need to arose. Also, running the broker on a separate machine simplified debugging as network traffic could be attributed to broker or clients easier by examining the packets' source and destination \acp{IP}.\par
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=8cm]{img/ch04/Testbed2.pdf}
     \captionof{figure}{A network diagram of the testbed that was used for testing the prototype.}
-    \label{fig:testbed}
+    \label{fig:testbed-network}
 \end{figure}
+The \ac{MQTT} broker software used on the \emph{broker} machine was Eclipse Mosquitto\footnote{https://mosquitto.org/} $1.5.7$ and had the \ac{WS} transport enabled to allow for clients to connect via \ac{WS}. The \ac{MQTT} clients running on the \emph{client} machine were implemented in Python using the Eclipse Paho library for Python (paho-mqtt\footnote{https://pypi.org/project/paho-mqtt/}).\par %TODO: Describe publish and processing pattern, ref mqtt graph below
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=14cm]{img/ch04/Testbed-Unit.pdf}
+    \captionof{figure}{The \enquote{ProcessingUnit} data-structures represent individual stations of the simplified water treatment plant.} %TODO: Describe
+    \label{fig:testbed-unit}
+\end{figure}
+The water treatment scenario required water treatment stations to be simulated individually as separate \ac{MQTT}, which was done by representing them as \enquote{ProcessingUnits} in the Python implementation of the testbed. As can be seen in figure \ref{fig:testbed-unit}, ProcessingUnits held individual \emph{MqttClient} instances running in separate threads, were subscribed to the topics of relevant other units such as their direct predecessors and successors and were capable of publishing their current state. Their \emph{process} method would be called cyclically and allow for units to calculate their intake, throughput and output.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=14cm]{img/ch04/watertreatmentplant-mqtt.png}
-    \captionof{figure}{\emph{TBD}} %TODO: Describe
+    \includegraphics[width=12cm]{img/ch04/Testbed-Chain.pdf}
+    \captionof{figure}{Chaining of the water treatment units, originating from a water source and eventually leading to a storage at the end of the processing pipeline.} %TODO: Describe
+    \label{fig:testbed-chain}
+\end{figure}
+These units were then \enquote{chained} up (shown in figure \ref{fig:testbed-chain}) in the order in which they were presented in the scenario by specifying their direct predecessor and successor units: potentially contaminated water would be pumped out of the \emph{source}, processed by a series of stations and eventually flushed into the \emph{storage}. The \emph{source} was an instance of the \enquote{SourceUnit} that featured a throughput calculated by a sine-wave function that used the elapsed time since program startup as input parameter. Also, in order to keep the program running infinitely without either the \emph{source} \enquote{running dry} due to its input tank emptying or the \emph{storage} overfilling, the \emph{storage's} output was programmed to feed back into the \emph{source's} input tank (as can be seen in figure \ref{fig:mqtt-data}). While this was not a realistic approach, it kept the program's design simple and allowed for continuous testing and did not impact the \ac{MQTT} communication.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=14cm]{img/ch04/watertreatment-mqtt-short.png}
+    \captionof{figure}{Screenshot of the application \enquote{MQTT Explorer} that was used to inspect and visualize the state of the water treatment plant. The left graph shows how the \emph{source's} input tank steadily emptied until it was filled by the \emph{storage's} output tank. The right graph shows how the \emph{flocculant} unit's input tank slowly filled up.} %TODO: Describe
     \label{fig:mqtt-data}
 \end{figure}
 
