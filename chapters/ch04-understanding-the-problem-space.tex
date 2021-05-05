@@ -5,7 +5,7 @@ In order to provide a satisfying solution to the problem at hand, the problem it
 
 \section{Prototypical Implementation}
 \label{sec:prototypical-implementation}
-The prototype was designed to be used in two realistic scenarios; one in an \ac{ICS} context and a more complex one in an \ac{IoT} cloud context. The goal of this section was to implement a prototype that could be used as a proxy to intercept communication between an \ac{IoT} device and its cloud service as shown in figure \ref{fig:network-communication-diagrams}. It was developed incrementally so individual components could be derived from requirements, designed, implemented and evaluated in fixed sprints.
+The prototype was designed to be used in three different scenarios, each taking place in a different context. The goal of this section was to implement a prototype that could be used as a proxy to intercept communication between an \ac{IoT} device and its cloud service as shown in figure \ref{fig:network-communication-diagrams}. It was developed incrementally so individual components could be derived from requirements, designed, implemented and evaluated in fixed sprints.
 
 \begin{figure}%
     \centering
@@ -18,7 +18,7 @@ The prototype was designed to be used in two realistic scenarios; one in an \ac{
 
 \subsection{Example Scenarios}
 \label{sec:example-scenarios}
-The following scenarios describe realistic configurations of \ac{IoT}/\ac{IIoT} devices that should be tested with the prototype:
+The following scenarios describe hypothetical configurations of \ac{IoT}/\ac{IIoT} devices that should be tested with the prototype and vary in both technical and logical complexity as well as in closeness to reality:
 
 \paragraph{Scenario \#1: Legacy \ac{ICS} Application}
 In this \ac{IIoT} scenario, a \ac{HMI} (\emph{Siemens KTP400 Basic}) sends commands to and receives data from a \ac{PLC} (\emph{Siemens S7-1200}) using Modbus \ac{TCP}. The \ac{PLC} continually counts up a value up to 100 and begins anew at zero while the \ac{HMI} displays the current value and provides a button that, upon being pressed by a user, resets the current value to zero. \\
@@ -27,8 +27,7 @@ In this scenario, attackers could perform a variety of attacks on the system by 
     \item By dropping messages sent from the \ac{PLC} to the \ac{HMI}, the application may appear unresponsive as new data is not displayed on the \ac{HMI}. In production environments, this could lead to dangerous situations as sensor readings that indicate harmful environmental conditions would not be presented to supervising personnel.
     \item When dropping messages sent from the \ac{HMI} to the \ac{PLC}, control commands can be suppressed. This attack can result in catastrophic situations when emergency shutdowns issued by supervising personnel are not registered by the affected machines.
 \end{itemize}
-
-Due to the rather simple nature of the Modbus \ac{TCP} protocol, intercepting and manipulating communication is expected to be trivial. %TODO: Add diagram?
+This scenario is of an academic nature and does not depict a realistic \ac{ICS} process, but focusses on the use of a legacy transport protocol. Due to the rather simple nature of the Modbus \ac{TCP} protocol, intercepting and manipulating communication is expected to be trivial. %TODO: Add diagram?
 %https://support.industry.siemens.com/tf//WW/en/posts/s7-1500-communication-and-modbus-tcp-on-hmi/144092?page=0&pageSize=10
 %https://support.industry.siemens.com/cs/pd/379924?pdti=td&dl=en&lc=en-DK
 
@@ -39,34 +38,40 @@ This distributed communication setup introduces a set of possible attacks that c
     \item Attackers that impersonate the remote server could drop or manipulate incoming publish packets, thus altering whether and/or what information is relayed other connected devices. For example, temperature readings that indicate a high environment temperature that would lead to the \ac{A/C} unit to be powered up could be rewritten in such a way that the transmitted temperature value is considered to indicate a low environment temperature, thus preventing the \ac{A/C} unit from running automatically.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=6cm]{img/ch04/Statemachine 2.pdf}
     \captionof{figure}{State machine of \ac{AWS} \ac{IoT} communication}
     \label{fig:aws-statemachine}
 \end{figure}
-This scenario makes use of three communication protocols, uses these protocols dependent on the state of authentication and even tunnels one protocol through another one. Therefore the proxy application has to implement a state-machine (as seen in \ref{fig:aws-statemachine}) and testing communication in this scenario is expected to be more complex than the first one.
+This scenario makes use of three communication protocols, uses these protocols dependent on the state of authentication and even tunnels one protocol through another one. Therefore the proxy application has to implement a state-machine (as seen in figure \ref{fig:aws-statemachine}) and testing communication in this scenario is expected to be more complex than the first one. Also, since this scenario makes use of the \ac{AWS} \ac{IoT} infrastructure, special care must be taken to ensure that authentication is properly relayed to the cloud servers.
+
+% Reference: https://aws.amazon.com/blogs/aws/aws-iot-cloud-services-for-connected-devices/
 
 \paragraph{Scenario \#3: Water Treatment Plant} Similar to scenario \#2, this scenario makes use of \ac{MQTT} for transporting messages. However, the scenario takes place in an \ac{ICS} context of critical infrastructure.
 
-\begin{figure}[ht]
+\begin{figure}[hb]
     \centering
     \includegraphics[width=12cm]{img/ch04/watertreatmentplant.png}
-    \captionof{figure}{\enquote{Illustration of a typical drinking water treatment process.} (by the CK-12 Foundation)\footnote{https://en.wikipedia.org/wiki/File:Illustration\_of\_a\_typical\_drinking\_water\_treatment\_process.png}}
+    \captionof{figure}{\enquote{Illustration of a typical drinking water treatment process.} (by the CK-12 Foundation)} %\footnote{https://en.wikipedia.org/wiki/File:Illustration\_of\_a\_typical\_drinking\_water\_treatment\_process.png}
     \label{fig:water-treatment}
 \end{figure}
 
-As shown in \ref{fig:water-treatment}, there are multiple steps involved in treating water for drinking. The scenario represents these steps as separate stations (\enquote{source}, \enquote{flocculants}, \enquote{sedimentation}, \enquote{filtration} and \enquote{storage}) that act as \ac{MQTT} clients. Each station receives water into an input tank, processes water from its input tank in a specified rate and flushes processed water into an output tank. Similar to how threads can suffer from starvation in a multithreading environment, these stations can either \enquote{run dry} when their input tank is empty or overflow when either tank is filled beyond their capacity. In this scenario, stations will only process water from their input tanks if their output tank provides sufficient available capacity.
-
-% State machine
-% Reference: https://aws.amazon.com/blogs/aws/aws-iot-cloud-services-for-connected-devices/
+As shown in figure \ref{fig:water-treatment}, there are multiple steps involved in treating water for drinking. The scenario represents these steps as separate stations (\enquote{source}, \enquote{flocculants}, \enquote{sedimentation}, \enquote{filtration} and \enquote{storage}) that act as \ac{MQTT} clients. Each station receives water into an input tank, processes water from its input tank in a specified rate and flushes processed water into an output tank. Similar to how threads can suffer from starvation in a multithreading environment, these stations can either \enquote{run dry} when their input tank is empty or overflow when either tank is filled beyond their capacity. In this scenario, stations will only process water from their input tanks if their output tank provides sufficient available capacity.\\
+Similar to scenario \#2, attackers could perform a series of attacks in this scenario:
+\begin{itemize}
+    \item Without intercepting any communication, attackers could cyclically overwrite water levels of either input and output tanks to stop stations and bring processing to a halt. For example, when attackers overwrite the \enquote{storage} station's input tank level to indicate exhausted capacities, the \enquote{disinfection} station would fill its output tank and eventually stop processing water. This would cause the \enquote{disinfection} station's input tank to fill up and lead to the \enquote{filtration} station's output tank to fill up. Ultimately, the water treatment plant would halt.
+    \item When any station publishes data about its tanks' levels indicating full or empty capacities, attackers could intercept those messages and change them to either indicate the opposite (change tank levels indicating \emph{full} capacities to levels indicating \emph{empty} capacity) or some arbitrary level information. This could lead to either pumping water from empty tanks, potentially damaging the pumps, or to overfilling tanks, leading to leaking excess water and potentially damaging further equipment.
+\end{itemize}
+This scenario greatly simplifies drinking water treatment by reducing the process to the producer-consumer problem known from multithreading. A more realistic representation of drinking water treatment plants would take further details, such as chemicals used in disinfection, into account.\\
+This scenario involves only \ac{MQTT} as a transport protocol but requires six \ac{MQTT} clients to run simultaneously.
 
 
 \subsection{Requirements}
-To be able to operate in both of the aforementioned scenarios, the prototype had to implement a set of functional requirements:
+To be able to operate in all of the aforementioned scenarios, the prototype had to implement a set of functional requirements:
 \begin{itemize}
     \item [\textbf{F1}] \textbf{Protocols:} The software must implement parsing/crafting messages/packets of the following communication protocols: \ac{HTTP}, \ac{WS}, \ac{MQTT} and Modbus \ac{TCP}. \\
-          \textit{Fit criterion: TBD} %TODO: Write fit-criterion
+          \textit{Fit criterion: The software must implement and support the \ac{HTTP}, \ac{WS} and \ac{MQTT} protocols so messages of those protocols can be further processed by the software.}
     \item [\textbf{F2}] \textbf{Network Stacks:} The software must be able to parse protocols that are tunnelled through other protocols (\enquote{\emph{stacked}}). It must provide an interface to the user where they can specify which communication protocols are used and whether and how they are stacked (further referred to as \emph{network stack}).\\
           \textit{Fit criterion: The software processes a configuration file that lets users specify which protocols to be used and whether/how they are stacked.}
     \item [\textbf{F3}] \textbf{State-Machines:} The software must be able to switch network stacks and scripts for processing dependent on configurable \emph{states} and \emph{transitions} between them. It must provide an interface for the user to specify when to switch to using another network stack, represented using \acp{FSM} and rule sets for transmission between states.\\
@@ -89,8 +94,8 @@ The following non-functional requirements were defined:
 Due to this implementation serving as a prototype and being of an academic nature, no specific constraints were defined. It was to be developed strictly ignoring aspects of usability and stability as it should not be used in production environments but in laboratories exclusively.
 
 \subsection{Design}
-The prototype was designed to be fit for use in the second scenario as, regarding network communication, it was more complex than the first one. Specifically, the second scenario demanded the implementation of a network stack and a state machine to switch between states.
-Parsing protocols that were tunnelled through other protocols appeared to be a potentially challenging requirement. In order to tackle it, a variation of the \emph{\enquote{pipeline}} (sometimes referred to \emph{\enquote{pipes and filters}}) design pattern was used (as shown in \ref{fig:design-pipes-and-filters}). It was designed to be used as follows:\par
+The prototype was designed to be fit for use in the second scenario as, regarding network communication, it was more complex than the other ones. Specifically, the second scenario demanded the implementation of a network stack and a state machine to switch between states.
+Parsing protocols that were tunnelled through other protocols appeared to be a potentially challenging requirement. In order to tackle it, a variation of the \emph{\enquote{pipeline}} (sometimes referred to \emph{\enquote{pipes and filters}}) design pattern was used (as shown in figure \ref{fig:design-pipes-and-filters}). It was designed to be used as follows:\par
 \enquote{Messages} originate from a listener, for example messages with raw byte payloads are received from a \ac{TCP} socket. These messages are sent to an initial \enquote{pipe} to be processed \emph{down}.
 Pipes are bi-directional routers that perform the following actions on messages:
 \begin{enumerate}
@@ -122,13 +127,22 @@ There are extensions to basic pipes such as:
 
 \subsection{Testing}
 \label{sec:prototype-testing}
-To test the prototype, a simple testbed (shown in \ref{fig:testbed}) was designed and implemented. It consisted of two Debian 10 machines that acted as a \ac{MQTT} broker and client and a Kali Linux machine that ran the prototype. All machines were connected to the \enquote{IoT Network} and were assigned static \ac{IP} addresses. While this setup allowed for more sophisticated proxy mechanisms such as \ac{ARP} spoofing, the \emph{client} machine directly connected to the \emph{kali} machine, which in turn directly connected to the \emph{broker} machine. The \emph{client} machine spawned two \ac{MQTT} client instances; one that subscribed to a \emph{/counter} topic and printed incoming values to console and one that constantly published an incrementing value to the \emph{/counter} topic.
+To test the prototype, a simple testbed ({fig:testbed}) was designed and implemented to realize scenario \#3 (discussed in section \ref{sec:example-scenarios}). It consisted of two Debian 10 machines that acted as a \ac{MQTT} broker and clients and a Kali Linux machine that ran the prototype and provided tools such as Wireshark that could be used for debugging and monitoring network traffic. All machines were connected to a single network and were assigned static \ac{IP} addresses. While this setup allowed for more sophisticated proxy mechanisms such as \ac{ARP} spoofing, the decision was made to directly connect the \ac{MQTT} clients to the \emph{kali} machine to reduce complexity and accelerate and simplify testing.\par
+The \ac{MQTT} broker software used on the \emph{broker} machine was Eclipse Mosquitto\footnote{https://mosquitto.org/} $1.5.7$ from the Debian package repositories, the \ac{MQTT} clients running on the \emph{client} machine were implemented in Python using the Eclipse Paho implementation for Python (paho-mqtt\footnote{https://pypi.org/project/paho-mqtt/}). %TODO: Describe publish and processing pattern, ref mqtt graph below
 
-\begin{figure}
+
+\begin{figure}[h]
     \centering
-    \includegraphics[width=12cm]{img/ch04/Testbed.pdf}
+    \includegraphics[width=8cm]{img/ch04/Testbed2.pdf}
     \captionof{figure}{A network diagram of the testbed that was used for testing the prototype.}
     \label{fig:testbed}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=14cm]{img/ch04/watertreatmentplant-mqtt.png}
+    \captionof{figure}{\emph{TBD}} %TODO: Describe
+    \label{fig:mqtt-data}
 \end{figure}
 
 \subsection{Implementation}
