@@ -20,7 +20,7 @@ The prototype was designed to be used in two realistic scenarios; one in an \ac{
 \label{sec:example-scenarios}
 The following scenarios describe realistic configurations of \ac{IoT}/\ac{IIoT} devices that should be tested with the prototype:
 
-\paragraph{Scenario \#1: \ac{ICS} Modbus \ac{TCP}}
+\paragraph{Scenario \#1: Legacy \ac{ICS} Application}
 In this \ac{IIoT} scenario, a \ac{HMI} (\emph{Siemens KTP400 Basic}) sends commands to and receives data from a \ac{PLC} (\emph{Siemens S7-1200}) using Modbus \ac{TCP}. The \ac{PLC} continually counts up a value up to 100 and begins anew at zero while the \ac{HMI} displays the current value and provides a button that, upon being pressed by a user, resets the current value to zero. \\
 In this scenario, attackers could perform a variety of attacks on the system by intercepting and manipulating network traffic, for example:
 \begin{itemize}
@@ -32,21 +32,33 @@ Due to the rather simple nature of the Modbus \ac{TCP} protocol, intercepting an
 %https://support.industry.siemens.com/tf//WW/en/posts/s7-1500-communication-and-modbus-tcp-on-hmi/144092?page=0&pageSize=10
 %https://support.industry.siemens.com/cs/pd/379924?pdti=td&dl=en&lc=en-DK
 
-\paragraph{Scenario \#2: \ac{AWS} \ac{IoT}} This \ac{IoT} smart home scenario utilizes two local \ac{IoT} devices that are integrated into a cloud environment such as the \ac{AWS} \ac{IoT} platform: a thermometer and an \ac{A/C} unit. Both devices connect to the cloud platform, authorize themselves at a \ac{REST} interface via \ac{HTTP} and upgrade their \ac{HTTP}-connection to \ac{WS} streams upon successful authorization. They eventually communicate to a remote \ac{MQTT} broker by tunnelling \ac{MQTT} packets over the \ac{WS} stream. At this stage, the thermometer publishes temperature readings to an \ac{MQTT} topic while the \ac{A/C} unit subscribes to the same topic and adjusts its operation depending on the incoming temperature readings. \\
+\paragraph{Scenario \#2: \ac{IoT} Cloud Application} This \ac{IoT} smart home scenario utilizes two local \ac{IoT} devices that are integrated into a cloud environment such as the \ac{AWS} \ac{IoT} platform: a thermometer and an \ac{A/C} unit. Both devices connect to the cloud platform, authorize themselves at a \ac{REST} interface via \ac{HTTP} and upgrade their \ac{HTTP}-connection to \ac{WS} streams upon successful authorization. They eventually communicate to a remote \ac{MQTT} broker by tunnelling \ac{MQTT} packets over the \ac{WS} stream. At this stage, the thermometer publishes temperature readings to an \ac{MQTT} topic while the \ac{A/C} unit subscribes to the same topic and adjusts its operation depending on the incoming temperature readings. \\
 This distributed communication setup introduces a set of possible attacks that could be performed when attackers \emph{impersonated} client-devices or the remote server:
 \begin{itemize}
     \item Impersonating the thermometer, attackers could send incorrect temperature data and effectively control the \ac{A/C} unit. When sending low temperature readings while the environment temperature is high, the \ac{A/C} unit would stop running. Conversely, when high temperature readings are sent while the environment temperature is low, the \ac{A/C} unit would run, and thus further cool down the environment.
     \item Attackers that impersonate the remote server could drop or manipulate incoming publish packets, thus altering whether and/or what information is relayed other connected devices. For example, temperature readings that indicate a high environment temperature that would lead to the \ac{A/C} unit to be powered up could be rewritten in such a way that the transmitted temperature value is considered to indicate a low environment temperature, thus preventing the \ac{A/C} unit from running automatically.
 \end{itemize}
-This scenario makes use of three communication protocols, uses these protocols dependent on the state of authentication and even tunnels one protocol through another one. Therefore the proxy application has to implement a state-machine (as seen in \ref{fig:aws-statemachine}) and testing communication in this scenario is expected to be more complex than the first one. %TODO: Add diagram?
 
-% State machine
-\begin{figure}[ht]
+\begin{figure}[h]
     \centering
     \includegraphics[width=6cm]{img/ch04/Statemachine 2.pdf}
     \captionof{figure}{State machine of \ac{AWS} \ac{IoT} communication}
     \label{fig:aws-statemachine}
 \end{figure}
+This scenario makes use of three communication protocols, uses these protocols dependent on the state of authentication and even tunnels one protocol through another one. Therefore the proxy application has to implement a state-machine (as seen in \ref{fig:aws-statemachine}) and testing communication in this scenario is expected to be more complex than the first one.
+
+\paragraph{Scenario \#3: Water Treatment Plant} Similar to scenario \#2, this scenario makes use of \ac{MQTT} for transporting messages. However, the scenario takes place in an \ac{ICS} context of critical infrastructure.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=12cm]{img/ch04/watertreatmentplant.png}
+    \captionof{figure}{\enquote{Illustration of a typical drinking water treatment process.} (by the CK-12 Foundation)\footnote{https://en.wikipedia.org/wiki/File:Illustration\_of\_a\_typical\_drinking\_water\_treatment\_process.png}}
+    \label{fig:water-treatment}
+\end{figure}
+
+As shown in \ref{fig:water-treatment}, there are multiple steps involved in treating water for drinking. The scenario represents these steps as separate stations (\enquote{source}, \enquote{flocculants}, \enquote{sedimentation}, \enquote{filtration} and \enquote{storage}) that act as \ac{MQTT} clients. Each station receives water into an input tank, processes water from its input tank in a specified rate and flushes processed water into an output tank. Similar to how threads can suffer from starvation in a multithreading environment, these stations can either \enquote{run dry} when their input tank is empty or overflow when either tank is filled beyond their capacity. In this scenario, stations will only process water from their input tanks if their output tank provides sufficient available capacity.
+
+% State machine
 % Reference: https://aws.amazon.com/blogs/aws/aws-iot-cloud-services-for-connected-devices/
 
 
@@ -110,7 +122,14 @@ There are extensions to basic pipes such as:
 
 \subsection{Testing}
 \label{sec:prototype-testing}
-\emph{TBD: Show simple testbed made of development machine, MQTT/WS client and broker.}
+To test the prototype, a simple testbed (shown in \ref{fig:testbed}) was designed and implemented. It consisted of two Debian 10 machines that acted as a \ac{MQTT} broker and client and a Kali Linux machine that ran the prototype. All machines were connected to the \enquote{IoT Network} and were assigned static \ac{IP} addresses. While this setup allowed for more sophisticated proxy mechanisms such as \ac{ARP} spoofing, the \emph{client} machine directly connected to the \emph{kali} machine, which in turn directly connected to the \emph{broker} machine. The \emph{client} machine spawned two \ac{MQTT} client instances; one that subscribed to a \emph{/counter} topic and printed incoming values to console and one that constantly published an incrementing value to the \emph{/counter} topic.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=12cm]{img/ch04/Testbed.pdf}
+    \captionof{figure}{A network diagram of the testbed that was used for testing the prototype.}
+    \label{fig:testbed}
+\end{figure}
 
 \subsection{Implementation}
 \emph{TBD:}  %TODO: Write out
