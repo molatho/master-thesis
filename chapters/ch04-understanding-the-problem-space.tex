@@ -53,9 +53,10 @@ This scenario makes use of three communication protocols, uses these protocols d
 \begin{figure}[hb]
     \centering
     \includegraphics[width=12cm]{img/ch04/watertreatmentplant.png}
-    \captionof{figure}{\enquote{Illustration of a typical drinking water treatment process.} (by the CK-12 Foundation)} %\footnote{https://en.wikipedia.org/wiki/File:Illustration\_of\_a\_typical\_drinking\_water\_treatment\_process.png}
+    \caption[Illustration of a typical drinking water treatment process. (by the CK-12 Foundation)]{Illustration of a typical drinking water treatment process. (by the CK-12 Foundation)\protect\footnotemark}
     \label{fig:water-treatment}
 \end{figure}
+\footnotetext{https://en.wikipedia.org/wiki/File:Illustration\_of\_a\_typical\_drinking\_water\_treatment\_process.png}
 
 As shown in figure \ref{fig:water-treatment}, there are multiple steps involved in treating water for drinking. The scenario represents these steps as separate stations (\enquote{source}, \enquote{flocculants}, \enquote{sedimentation}, \enquote{filtration} and \enquote{storage}) that act as \ac{MQTT} clients. Each station receives water into an input tank, processes water from its input tank in a specified rate and flushes processed water into an output tank. Similar to how threads can suffer from starvation in a multithreading environment, these stations can either \enquote{run dry} when their input tank is empty or overflow when either tank is filled beyond their capacity. In this scenario, stations will only process water from their input tanks if their output tank provides sufficient available capacity.\\
 Similar to scenario \#2, attackers could perform a series of attacks in this scenario:
@@ -66,20 +67,31 @@ Similar to scenario \#2, attackers could perform a series of attacks in this sce
 This scenario greatly simplifies drinking water treatment by reducing the process to the producer-consumer problem known from multithreading. A more realistic representation of drinking water treatment plants would take further details, such as chemicals used in disinfection, into account.\\
 This scenario involves only \ac{MQTT} as a transport protocol but requires six \ac{MQTT} clients to run simultaneously.
 
+\paragraph{Derived Use-Cases} A number of simple %High-level, abstrahiert?
+use-cases (shown in \ref{fig:use-cases-scenarios}) can be derived from these scenarios. The actors are the \enquote{Attacker} that intend to interact with the system in a malicious way, the \enquote{Server} and \enquote{Client} that use the system for transportation of messages. The following use-cases are found in the aforementioned scenarios:
+
+\paragraph{Send/Receive Messages:} Used by \enquote{Server} and \enquote{Client} to
+
+\begin{figure}
+    \centering
+    \includegraphics[width=14cm]{img/ch04/UseCases_Scenarios.pdf}
+    \captionof{figure}{The variation of the \emph{\enquote{pipes and filters}}/\emph{\enquote{pipeline}} design pattern used in the prototype.}
+    \label{fig:use-cases-scenarios}
+\end{figure}
 
 \subsection{Requirements}
 To be able to operate in all of the aforementioned scenarios, the prototype had to implement a set of functional requirements:
 \begin{itemize}
     \item [\textbf{F1}] \textbf{Protocols:} The software must implement parsing/crafting messages/packets of the following communication protocols: \ac{HTTP}, \ac{WS}, \ac{MQTT} and Modbus \ac{TCP}. \\
-          \textit{Fit criterion: The software must implement and support the \ac{HTTP}, \ac{WS} and \ac{MQTT} protocols so messages of those protocols can be further processed by the software.}
+          \textbf{Fit criterion:} The software must implement and support the \ac{HTTP}, \ac{WS} and \ac{MQTT} protocols so messages of those protocols can be further processed by the software.
     \item [\textbf{F2}] \textbf{Network Stacks:} The software must be able to parse protocols that are tunnelled through other protocols (\enquote{\emph{stacked}}). It must provide an interface to the user where they can specify which communication protocols are used and whether and how they are stacked (further referred to as \emph{network stack}).\\
-          \textit{Fit criterion: The software processes a configuration file that lets users specify which protocols to be used and whether/how they are stacked.}
+          \textbf{Fit criterion:} The software processes a configuration file that lets users specify which protocols to be used and whether/how they are stacked.
     \item [\textbf{F3}] \textbf{State-Machines:} The software must be able to switch network stacks and scripts for processing dependent on configurable \emph{states} and \emph{transitions} between them. It must provide an interface for the user to specify when to switch to using another network stack, represented using \acp{FSM} and rule sets for transmission between states.\\
-          \textit{Fit criterion: The software processes a configuration file that lets users specify when to switch between network stacks.}
+          \textbf{Fit criterion:} The software processes a configuration file that lets users specify when to switch between network stacks.
     \item [\textbf{F4}] \textbf{Integration:} The software shall provide interfaces for integration of third-party software.\\
-          \textit{Fit criterion: The software implements interfaces that allow sending packets to other applications such as \enquote{Burp Suite}.}
+          \textbf{Fit criterion:} The software implements interfaces that allow sending packets to other applications such as \enquote{Burp Suite}.
     \item [\textbf{F5}] \textbf{Scripting:} The software shall provide scripting capabilities for automated manipulation of messages/packets.\\
-          \textit{Fit criterion: Users can define script-snippets to be executed on messages/packets.}
+          \textbf{Fit criterion:} Users can define script-snippets to be executed on messages/packets.
 \end{itemize}
 
 The following non-functional requirements were defined:
@@ -210,6 +222,7 @@ The duration of the interviews varied from 45 minutes to two hours depending on 
     \item \emph{conclusions drawn}
     \item \emph{personas and user stories -> new requirements!}
 \end{itemize}
+%TODO: CUT interview files, also make them audio only!
 
 \section{Analysis of Existing Software}
 \paragraph{Wireshark} more than 3,400,000 lines of C code\footnote{This number was returned by the \emph{cloc} utility run on commit \emph{3a8111e1c2adcdc0603993c6ed5d20a40f162125} from Aug. 4th 2020 of Wireshark's Github mirror.}\emph{TBD}
