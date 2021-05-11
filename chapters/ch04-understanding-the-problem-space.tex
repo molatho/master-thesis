@@ -197,34 +197,31 @@ weekly sprints after which work on the prototype was halted. It was written in T
     \label{fig:prototype-message-payload}
 \end{figure}
 \paragraph{Messages and Payloads}
-The pipeline system implemented routing and processing of messages, however this required a concept of what messages are and how they convey the information required to perform meaningful and useful operations on network communication. Figure \ref{fig:prototype-message-payload} shows the classes and interfaces that define the messages and payloads types. \emph{Messages} hold basic information such as a unique identifier, the communication protocol they were sent through and metadata that was used to store header information in. The \emph{IPayload} interface allowed for implementation and use of various payload formats such as raw binary information (e.g. \ac{MQTT} message bodies), string contents (e.g. \ac{HTTP} response bodies when the \emph{Content-Type} header indicated \emph{text/*} data) or JavaScript objects such as dictionaries that could hold arbitrary data for cases where there was no meaningful way to extract payloads from messages. The \emph{MessageDirection} structure was used to relay the message to the correct socket after it was processed by the pipeline.
+The pipeline system implemented routing and processing of messages, however this required a concept of what messages are and how they convey the information required to perform meaningful and useful operations on network communication. Figure \ref{fig:prototype-message-payload} shows the classes and interfaces that defined the messages and payloads types. \emph{Messages} hold basic information such as a unique identifier, the communication protocol they were sent through and metadata that was used to store header information in. The \emph{IPayload} interface allowed for implementation and use of various payload formats such as raw binary information (e.g. \ac{MQTT} message bodies), string contents (e.g. \ac{HTTP} response bodies when the \emph{Content-Type} header indicated \emph{text} data) or JavaScript objects such as dictionaries that could hold arbitrary data for cases where there was no meaningful way to extract payloads from messages. The \emph{MessageDirection} structure was used to relay the message to the correct socket after it was processed by the pipeline.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=14cm]{img/ch04/prototype/message-payload.pdf}
+    \includegraphics[width=14cm]{img/ch04/prototype/factory-builder.pdf}
     \captionof{figure}{?} %TODO: Describe
-    \label{fig:prototype-message-payload}
+    \label{fig:prototype-factory-builder}
 \end{figure}
 
+\paragraph{Factories and Builders}
+The requirement \enquote{F2 Network Stacks} implied a way of initializing various objects that represent pipelines, sockets and \acp{FSM}, dependent on configuration files loaded at runtime. As shown in figure \ref{fig:prototype-factory-builder}, the factory design pattern was used to provide an easy way to initialize pipes, filters, encoders and sockets while passing them metadata used for object creation. An \emph{IFactory} interface exposed simple methods for registering \emph{IBuilders} and building objects. The generic type parameters \emph{O} and \emph{T} were placeholders for type specific options (e.g. \emph{IPipeOptions} and \emph{IFilterOptions}) and the type of the created objects (e.g. \emph{IPipe} and \emph{IFilter}), respectively. The options types would contain information that was used for creating individual instances, such as a pipe's name or a server socket's address to listen on. The \emph{BaseFactory} class implemented the \emph{IFactory} interface and held an internal hash-map that was used to register \emph{IBuilders} by name. Lastly, the \emph{IBuilder} interface provided a method for initializing objects with the given options, providing default values for constructor parameters. There were static instances of factories and builders of pipes, filters and servers. For instance, the global server-factory \emph{SERVER\_FACTORY} used the global TCP server builder instance \emph{TCP\_SERVER\_BUILDER}.
 
-
-\emph{TBD:}  %TODO: Write out
-\begin{itemize}
-    \item \emph{technology: typescript}
-    \item \emph{sprints: two sprints, started with communication (http + ws + mqtt)}
-    \item \emph{failed: high-level API, callback-hell (debugging/tracing), missing typescript typings, very tight coupling}
-\end{itemize}
+%TODO: FSMs? Also, reference postmortem
 
 \subsection{Insights Gained}
 The following insights were gained through the prototypical implementation. Some resulted in questions relevant for the expert interviews that were to be held:
 \begin{itemize}
-    \item Due to the \ac{MTU}, large messages are broken into chunks that are transferred sequentially. This requires the proxy to work on streams of incoming data and reassemble messages from said chunks. % TODO: Also, stateful + buffers per connection
-    \item Support of multiple clients is non-trivial as communication between clients and servers is not necessarily connection-oriented (e.g. \ac{HTTP}).\\
+    \item Due to the \ac{MTU}, large messages were broken into chunks that were transferred sequentially. This required the proxy to work on streams of incoming data and reassemble messages from said chunks. While individual \ac{MQTT} messages would often be short enough to be transmitted in a single \ac{TCP} packet, other communication protocols such as \ac{HTTP} could yield messages that were several hundred kilobytes or more in size (e.g. when downloading images). This also required the encoders to be stateful as they had to load data of incoming packets into individual buffers until they could parse complete messages, introducing the need to initialize one pipelines per device connected to the proxy application.
+    \item Supporting multiple client devices was non-trivial as communication between clients and servers was not necessarily connection-oriented (e.g. \ac{HTTP}) and individual client devices could not be detected reliably as the \ac{TCP} server socket only had information about its peer's \ac{IP} addresses that, in a real scenario, could be hidden behind another device that implemented \ac{IP} masquerading (e.g. \ac{NAT}). \\
           \emph{Q: Do penetration testers need to test multiple devices at the same time?}
-    \item Increasing the size of the payload of a messages can result in the payload being split upon multiple messages (e.g. \ac{WS}).\\
+    \item In some cases, e.g. with \ac{WS} data-frames, extending a message's payload resulted in its payload being split into multiple messages. This indirectly created new messages that, depending on the exact protocol used, needed to use generated values (such as an unique identifier) or context-specific information (e.g. authentication tokens used in \ac{HTTP} headers). Also, some libraries would generate those values themselves and not define ways to specify those manually.\\
           \emph{Q: Do penetration testers require exact control over the implementation of protocols?}
-    \item Manipulating messages, on the fly via scripting or by hand using third-party integrations (e.g. to \emph{Burp Suite}), can introduce latency to the communication. \emph{Q: Are there strict timing requirements during penetration tests?}
-    \item Many libraries offer high-level functions to the programmer while avoiding exposure of low-level functionalities like crafting or parsing messages.
+    \item Manipulating messages, automatically via scripting or by hand using third-party integrations (e.g. to \emph{Burp Suite}), could introduce latency to the communication.\\
+          \emph{Q: Are there strict timing requirements during penetration tests?}
+    \item Many libraries offered high-level functions to the programmer while avoiding exposure of low-level functionalities like crafting or parsing messages. Exposing such functionalities would require dissecting and altering libraries on a source-code level.
 \end{itemize}
 
 
@@ -246,7 +243,7 @@ Interviews were conducted with six %Patrick, Cédric, Théo, Oliver, Pierre, Jon
 \emph{NVISO} employees that all had worked on security assignments on \ac{IoT} or \ac{IIoT} applications in the past. There is considerable variety in
 \begin{itemize}
     \item the experience they had in working on security assignments in general: all interviewees had a strong background in cyber security that reached back multiple years except one who was a working student at \emph{NVISO Labs}.
-    \item and the experience they had in working on \ac{IoT}/\ac{IIoT} applications: two interviewees worked on assessing \ac{IoT}/\ac{IIoT} applications only occasionally, one was part of a car manufacturer's automotive security team in the past and three were part of \emph{NVISO Labs} and worked with smart devices on a regular basis.
+    \item the experience they had in working on \ac{IoT}/\ac{IIoT} applications: two interviewees worked on assessing \ac{IoT}/\ac{IIoT} applications only occasionally, one was part of a car manufacturer's automotive security team in the past and three were part of \emph{NVISO Labs} and worked with smart devices on a regular basis.
           % Position? CEO vs. Consultant vs. Working student
           % 
 \end{itemize}
