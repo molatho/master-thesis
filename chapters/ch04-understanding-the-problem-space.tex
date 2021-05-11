@@ -239,23 +239,30 @@ was created to keep focus on key points during interviews so that interviewees w
 
 
 \subsection{Conducting Interviews}
-Interviews were conducted with six %Patrick, Cédric, Théo, Oliver, Pierre, Jonah
-\emph{NVISO} employees that all had worked on security assignments on \ac{IoT} or \ac{IIoT} applications in the past. There is considerable variety in
+Interviews were conducted with six
+\emph{NVISO} employees (Patrick Eisenschmidt, Cédric Bassem, Théo Rigas, Oliver Nettinger, Pierre-Alain Mouy, Jonah Bellemans) that all had worked on security assignments on \ac{IoT} or \ac{IIoT} applications in the past. There is considerable variety in
 \begin{itemize}
-    \item the experience they had in working on security assignments in general: all interviewees had a strong background in cyber security that reached back multiple years except one who was a working student at \emph{NVISO Labs}.
-    \item the experience they had in working on \ac{IoT}/\ac{IIoT} applications: two interviewees worked on assessing \ac{IoT}/\ac{IIoT} applications only occasionally, one was part of a car manufacturer's automotive security team in the past and three were part of \emph{NVISO Labs} and worked with smart devices on a regular basis.
-          % Position? CEO vs. Consultant vs. Working student
-          % 
+    \item the experience they had in working on security assignments in general: all interviewees had a strong background in cyber security that reached back multiple years except one who was a working student at \emph{NVISO Labs} (Bellemans).
+    \item the experience they have had in working on \ac{IoT}/\ac{IIoT} applications: two interviewees worked on assessing \ac{IoT}/\ac{IIoT} applications only occasionally (Eisenschmidt, Mouy), one was part of a car manufacturer's automotive security team in the past (Nettinger) and two were part of \emph{NVISO Labs} and worked with smart devices on a regular basis (Bassem, Rigas).
+    \item the focus of their everyday work: two interviewees were \emph{NVISO} chief executives and switched to working on management tasks rather than security assessments (Nettinger, Mouy), one was a working student finishing their master's thesis with a focus on legal aspects of \ac{IoT} devices (Bellemans) and the remaining three worked on security assessments in a variety of fields (Eisenschmidt, Bassem, Rigas).
 \end{itemize}
-The duration of the interviews varied from 45 minutes to two hours depending on the amount and level of detail of information provided by the interviewees and the number of times that the interviewer had to ask further questions.
+The duration of the interviews varied from 45 minutes to two hours depending on the amount and level of detail of information provided by the interviewees and the number of times that the interviewer had to ask further questions.\par
+Due to the COVID-19 pandemic, interviews were conducted remotely over Microsoft Teams and recorded for later review and analysis. All interviews were conducted successfully, however some problems were had: due to unstable internet connections interviews were sometimes interrupted for up to 30 seconds, low bandwidth and low microphone quality sometimes made making out specific words and phrases very hard.
 
-\emph{TBD:} %TODO: Write out
-\begin{itemize}
-    \item \emph{Summary of the interviews}
-    \item \emph{conclusions drawn}
-    \item \emph{personas and user stories -> new requirements!}
-\end{itemize}
-%TODO: CUT interview files, also make them audio only!
+\subsection{Interview Analysis}
+The answers interviewees gave to the various questions present in the interview guide varied greatly in detail. The following paragraphs attempt to summarize the essential statements interviewees made, sorted by the sections of the interview guide.
+
+\paragraph{1. Experiences with \ac{IoT}} Asked about the technologies they encountered in their work, most interviewees stated that \ac{MQTT} (5/6) and \ac{HTTP} (6/6) were widely used in the smart applications they assessed. For \ac{IoT} devices they found that Espressif microcontrollers such as the ESP32 and ESP8266 were used (2/6). Especially in cheap devices they found that custom protocols and infrastructure were used (2/6), whereas high-end devices usually used \ac{MQTT} and \ac{HTTP} and worked with well-known cloud infrastructures such as \ac{AWS}, Microsoft Azure or Google Cloud Platform. Most interviewees worked on Smart Home products (4/6) with one notable exception being Nettinger who worked on Smart Cars.\\
+Usually, there were no technical constraints for the interviewees when performing security assessments. There were some non-technical constraints such as working from a blackbox perspective rather than working from a whitebox perspective that would allow evaluating more security aspects of a system in less time (Eisenschmidt, Bassem, Rigas). Depending on the client and the exact application that was to be tested, interviewees said that they made use of either mobile lab environments (2/6) or stationary lab environments (3/6). %Single devices?
+
+\paragraph{2. Processes in Everyday Life} Regarding the goals of their assessments, interviewees would take on one of two approaches: The first was penetration testing (Eisenschmidt, Bassem, Rigas), aiming to evaluate as many components of a system as they could during their assessment. The second was red-teaming (Nettinger, Mouy, Bassem, Rigas) which aimed to get some level of access, preferably privileged, to a device or server in order to take influence on the application's logic or exfiltrate data. The scopes of their assessments was usually defined by the client and could include testing of devices, applications and firmware or performing source-code and cloud configuration reviews (Eisenschmidt).\\
+The high-level tasks carried out during assessments would generally be the same across assessments: first, interviewees would inspect applications passively from a blackbox perspective without interacting with them. This could incorporate looking for hardware interfaces on a device (Bassem, Rigas), looking for open network ports (Bellemans), reverse engineering Android applications and inspecting certain artefacts as manifest files (Eisenschmidt) and monitoring applications' network traffic (Bellemans). Nettinger stated that when working with cars, fuzzing was a task often carried out against bus protocol implementations because the devices implementing those protocols were often supplied by third parties and source-code was usually not available.\\
+The tools used by the interviewees were mostly dependent on the technologies and protocols they worked with, such as Burp Suite for examining \ac{HTTP} communication (Eisenschmidt, Bassem, Rigas, Nettinger, Mouy, Bellemans). However, some general tools were used for information gathering (nmap and nessus), monitoring (Wireshark) and networking (socat, mitmproxy). Bassem, Rigas and Mouy stated that they would occasionally implement their own tools or scripts when they found that there either were no tools available that suited their needs or those tools would not work. According to Rigas, tools were highly specific to custom and preparing them up for use could be more challenging than actually using them. Bassem, Rigas and Bellemans stated that tools were often immature, speaking of their automated tests performed on smart devices Bellemans criticized that automated tools often yielded inpresice or incorrect results such as nmap reporting a gameserver running on a smart lightbulb.
+
+\paragraph{3. The Future of \ac{IoT}} When asked about the current challenges the interviewees were facing working on \ac{IoT} assessments, they gave very individual answers: Eisenschmidt expressed concerns about data protection and cloud environments being a rather new technology that requires engineers to securely configure them. Mouy and Eisenschmidt stated that protocols and frameworks became increasingly complex and more and more devices interacted with each other, adding complexity to the security assessments. Also, there were a lot of custom protocols and frameworks that lacked proper tooling and were time-consuming to asses (Bellemans, Mouy). When working on \ac{IoT} assignments, clients often had a traditional view on the assignments and occasionally wanted the testers to perform blackbox-tests only although additional whitebox-tests would potentially help covering more components and internals of applications (Bassem, Rigas).\\
+
+
+\paragraph{Conclusions} %New requirements?
 
 \section{Analysis of Existing Software}
 \paragraph{Wireshark} more than 3,400,000 lines of C code\footnote{This number was returned by the \emph{cloc} utility run on commit \emph{3a8111e1c2adcdc0603993c6ed5d20a40f162125} from Aug. 4th 2020 of Wireshark's Github mirror.}\emph{TBD}
