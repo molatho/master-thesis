@@ -8,13 +8,15 @@
 Building on the software design of the first prototype presented in section \ref{sec:prototype-design} and the insights gained in section \ref{sec:prototype-insights}, two design concepts were worked out. The following sections will detail components and principles of both concepts.
 
 \section{Design \#1: Singular Proxy Application}
-This design concept is based on the general ideas presented in section \ref{sec:prototype-design} (e.g. state-machines, network stacks and pipes) and employs a basic architecture shown in figure \ref{fig:component-view-1}.\\
+\label{sec:design-1}
+This design concept is based on the general ideas presented in section \ref{sec:prototype-design} (e.g. state-machines, network stacks and pipes) and employs a basic architecture shown in figure \ref{fig:component-view-1}.
 \begin{figure}[h]
     \centering
     \includegraphics[width=12cm]{img/ch05/component-view-1.pdf}
     \captionof{figure}{High-level component diagram of the proxy application concept}
     \label{fig:component-view-1}
 \end{figure}
+\paragraph{High-level Overview}
 As discussed in the previous chapter, the requirement \enquote{F2 Network Stacks} introduces the need for dynamically initialized objects which in this concept is implemented by making use of the factory pattern in the \enquote{Site} component. This component allows for registering \emph{Factories} that are used to initialize objects. Similar to the implementation in the first prototype, factories initialize objects using metadata supplied from a configuration file.\\
 Communication with other systems is encapsulated into the \enquote{Message IO}-package shown in figure \ref{fig:component-view-2}. Applications that are tested by penetration testers are connected to sockets provided by the \enquote{Gateway} component and temporarily stored in a message queue to be processed by the network stacks organized by the \enquote{Global Statemachine}. Similar to the \enquote{Server} interface used in the first prototype, gateways provide means of communicating with external systems and receiving and sending messages. They are highly abstract and meant to be used for implementing interfaces for any kind of communication protocols and technologies, such as \ac{IP}-based \ac{TCP} and \ac{UDP} communication but also other protocols such as USB, Bluetooth, ZigBee or KNX.
 \begin{figure}[h]
@@ -66,10 +68,33 @@ While there are many opportunities for specific implementations of the IProcesso
     \label{fig:classes-4-messages}
 \end{figure}
 \paragraph{Messages}
-
-
+Compared to the first prototype's design, the data-structures that represent messages were mostly unchanged. However, during implementation and testing of the first prototype it became apparent that in some cases \enquote{historical} information about messages was required. This iteration of the design adds a list of \enquote{ProtocolData} instances to messages that specify information about the protocol, message headers and the payload (\enquote{ISource}). IProcessors and IEncoders append newly transformed or (de-)serialized ProtocolData instances to a message so over time, a message contains records of all those operations performed on it. This information can be useful in a number of cases like serialization: when a message is deserialized (e.g. the payload of a \ac{WS} message is extracted) on its way down a pipeline, important information about the formerly encapsulating protocol is lost (such as the \ac{WS} frame's flags). When a message is serialized on its way back up a pipeline, an IEncoder would have to generate this information or try and deduce it from the message, which is not always possible. However, since it can access the messages' history and former ProtocolData, it can read the original information and use this for serialization.
 
 \section{Design \#2: Distributed Proxy Application}
+\label{sec:design-2}
+The design shown in the previous section was an iteration of the design worked out for the first prototype in section \ref{sec:prototype-design} and addressed some fundamental, architectural flaws and aimed for better flexibility and more meaningful interface definitions. However, it did not address another technical problem that was encountered during the implementation of the first prototype: constraints in platform, framework and programming language compatibility. 
+%TODO: describe changes to overview, describe registry/port interfaces
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=14cm]{img/ch05/component-view2-1.pdf}
+    \captionof{figure}{?} %TODO: Describe
+    \label{fig:component-view2-1}
+\end{figure}
+\paragraph{Messages}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=4cm]{img/ch05/component-view2-2-remote-unit.pdf}
+    \captionof{figure}{?} %TODO: Describe
+    \label{fig:component-view2-2-remote-unit}
+\end{figure}
+\paragraph{Messages}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=14cm]{img/ch05/component-view2-3-registry-port-unit.pdf}
+    \captionof{figure}{?} %TODO: Describe
+    \label{fig:component-view2-3-registry-port-unit}
+\end{figure}
 
 %\paragraph{Software Architecture} The system employs a server-client architecture that allows to
 
