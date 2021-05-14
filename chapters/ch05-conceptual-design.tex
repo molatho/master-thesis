@@ -7,7 +7,7 @@
 %\label{sec:inferring-software-components}
 Building on the software design of the first prototype presented in section \ref{sec:prototype-design} and the insights gained in section \ref{sec:prototype-insights}, two design concepts were worked out. The following sections will detail components and principles of both concepts.
 
-\section{Design \#1: Singular Proxy Application}
+\section{Design \#1: Monolithic Proxy Application}
 \label{sec:design-1}
 This design concept is based on the general ideas presented in section \ref{sec:prototype-design} (e.g. state-machines, network stacks and pipes) and employs a basic architecture shown in figure \ref{fig:component-view-1}.
 \begin{figure}[h]
@@ -70,7 +70,7 @@ While there are many opportunities for specific implementations of the IProcesso
 \paragraph{Messages}
 Compared to the first prototype's design, the data-structures that represent messages are mostly unchanged (as shown in figure \ref{fig:classes-4-messages}). However, during implementation and testing of the first prototype it became apparent that in some cases \enquote{historical} information about messages was required. This iteration of the design adds a list of \enquote{ProtocolData} instances to messages that specify information about the protocol, message headers and the payload (\enquote{ISource}). IProcessors and IEncoders append newly transformed or (de-)serialized ProtocolData instances to messages. So over time, a message contains records of all those operations performed on it. This information can be useful in a number of cases like serialization: when a message is deserialized (e.g. the payload of a \ac{WS} message is extracted) on its way down a pipeline, important information about the formerly encapsulating protocol is lost (such as the \ac{WS} frame's flags). When a message is serialized on its way back up a pipeline, an IEncoder would have to generate this information or try and deduce it from the message, which is not always possible. However, since it can access the messages' history and former ProtocolData, it can read the original information and use this for serialization.
 
-\section{Design \#2: Distributed Proxy Application}
+\section{Design \#2: Distributed Proxy Services}
 \label{sec:design-2}
 The design shown in the previous section was an iteration of the design worked out for the first prototype in section \ref{sec:prototype-design} and addressed some fundamental, architectural flaws and aimed for better flexibility and more meaningful interface definitions. However, it did not address other problems that were encountered during the implementation of the first prototype: constraints in platform, framework and programming language compatibility and flexibility. As a consequence of these constraints, the proxy application needed to be developed as a monolithic application. Therefore, each extension, like additional IEncoders that added support for new protocols, was required to be implemented in the same programming language and run on the same platform and as part of the same process as the proxy application. This also effectively limited the available selection of libraries. Another potential problem of the former design concept was the tight coupling of pipes and the deeply nested structure and hierarchy of state-machines, pipes and network stacks. While this architecture allowed to implement routing messages through composition (\emph{by design}), it greatly added to the runtime complexity and made debugging the application significantly harder.
 \begin{figure}[h]
@@ -105,16 +105,12 @@ Also, to transmit data between the proxy application and its remote units, this 
 \label{sec:design-comparison}
 Both design concepts discussed in the previous sections, the monolithic and the distributed concept, promise to solve specific problems. The following paragraphs compare both concepts on the base of a set of core design aspects:
 \paragraph{Software architecture}
-% Monolithic: self-contained application, app + all extensions written in the same language, executed on the same platform
-% Distributed: business logic implemented in the proxy app, extensions such as encoding done by remote units that are platform and programming language agnostic
+The monolithic concept suggests a centralized and self-contained design that combines the high-level business logic of a proxy-application with low-level tasks such as (de-)serialization of various protocols. It is designed to be run on a single machine.\\
+In contrast to this, the distributed concept separates the high-level business logic (like routing messages) and low-level tasks as part of a client-server model: the high-level logic is implemented in the central proxy server while low-level tasks are isolated into separate remote services. These services can either be run on the same machine the proxy server runs on or on external machines. Through dynamic creation and registration of remote service instances, this concept also implements scalability. Since there is no restrictions to the programming languages, platforms or frameworks used by remote services, the concept also embraces platform compatibility.
 \paragraph{Complexity}
-% Monolithic: business-logic is hard to debug due to complex nested structures, extensions are simple to debug
-% Distributed: business-logic is simple to debug (pipes.rip), extensions are harder to debug due to distributed setup (connection losses, remote machines, remote debuggers?)
-\paragraph{Maturity}
-% Monolithic: pipes were tested before and improved, new concepts are untested but at least the design is complete and consistent
-% Distributed: some aspects were simplified (pipes removed), however some core and non-trivial aspects are not fully specified
+The reliance on deeply nested data-structures has a high impact on the complexity of the monolithic concept at runtime. This makes debugging an implementation of this concept significantly harder and more time-consuming. However, adding new extensions to this concept becomes a comparatively easier task as integration of such new extensions only takes place on a source-code level.\\
+As opposed to this, the distributed approach simplifies the high-level tasks such as routing messages by introducing components that allow traceability and thus establish transparency. The offloading of protocol implementations into logical units that are accessed via \ac{IPC} however contribute to a more challenging deployment of the application. Also, due to their distributed nature, debugging these remote units can introduce further problems (e.g. connection losses and high latencies) and requires a more sophisticated and complex testing environment than the monolithic concept. 
 
-While its underlying ideas potentially hold a lot of promise, they also introduce new problems:
-\begin{itemize}
-    \item \textbf{De-centralization:} The de-centralized approach to processing messages greatly increases the application's complexity on multiple levels.
-\end{itemize}
+\paragraph{Maturity}
+Some of the core components of the monolithic concept were already tested and proven by the first prototype. For instance, linked pipes proved to be an effective means to route and process messages up and down a processing pipeline. However, due to time-constraints, other core concepts such as the state-machines could not be tested. Regarding completeness, it is noteworthy that this concept's interfaces are well-defined.\\
+Contrary to this, the distributed concept is not finished and requires further work to clear up a number of essential questions before it can be completed. Also, the previously proven effective idea of using pipes for routing and processing is removed in the distributed approach. This denies the approach any effectiveness acquired through previous design iterations.
