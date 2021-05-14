@@ -57,8 +57,8 @@ States hold a \emph{NetStack} which in turn encapsulate a series of connected pi
 \paragraph{Pipes} Building upon the approach of routing and processing messages via pipes discussed in section \ref{sec:prototype-design}, this design concept addresses some inconsistencies of the former design and adds needed flexibility. As shown in figure \ref{fig:app-classes-2-pipes}, the \enquote{IPipe} interface persisted and is extended by the \enquote{ITrackablePipe} interface that adds a unique identifier to pipes. This enables the application to easily locate pipes by looking up their identifiers in the \enquote{PipeDirectory}, allowing to interact with and inject messages into individual pipes directly. A \enquote{BasePipe} implements the ITrackablePipe interface as well as simple routing logic for forwarding messages up and down pipelines. However, only \enquote{ProcessingPipes} actually perform any kind of operations on messages directly: they can employ \enquote{IEncoders} for (de-)serialization and \enquote{IProcessors} for transformation of messages. Contrary to the design concept of the first prototype, IEncoders need to specify which data formats they support as source and target encodings. This allows the implementation of multiple IEncoders for the same protocol that work with different source or target data formats. For example, some IEncoder may only provide decoding functionality for raw binary data into \ac{HTTP} messages with raw binary bodies while another implementation provides functionality to encode strings into \ac{HTTP} message bodies. In the first prototype's design, the very concept of filters was only vaguely described and lacked a clear and concise interface. This issue is resolved in this next iteration of the design concept:
 \begin{itemize}
     \item Filters are renamed to \enquote{IProcessors} (conveying the purpose and meaning of the interface in its name)
-    \item IProcessors specify a \enquote{ProcessingDirection} that determines whether messages shall be processed on their way \emph{down} or \emph{up} a pipeline or in any direction, effectively allowing over transformations on messages. This can be helpful when transformations shall only be applied in one direction or maybe even once in a pipeline, like replacing the value of the \emph{Host} header of a \ac{HTTP} message.
-    \item An IProcessor can apply logic to messages in its \emph{process} method that also receives the pipeline's context. The returned \enquote{ProcessingResult} indicates success or failure of the operation or whether the IProcessor directs dropping a message or sending it back up the pipeline.
+    \item IProcessors specify a \enquote{ProcessingDirection} that determines whether messages shall be processed on their way \emph{down} or \emph{up} a pipeline or in any direction, effectively granting control over applying transformations on messages. This can be helpful when transformations shall only be applied in one direction or maybe only once in a pipeline, like replacing the contents of the body of an \ac{HTTP} message.
+    \item An IProcessor can apply logic to messages in its \emph{process} method that also receives the pipeline's context. The returned \enquote{ProcessingResult} indicates success or failure of the operation or whether the IProcessor requests dropping a message or sending it back up the pipeline.
 \end{itemize}
 While there are many opportunities for specific implementations of the IProcessor interface, one general implementation is envisioned by the design concept: a simple \enquote{ScriptProcessor} allows penetration testers to supply scripts that are executed at runtime and allow transformation of messages. This directly fulfils the requirement \enquote{"F5 Scripting"}.
 \begin{figure}[h]
@@ -68,42 +68,53 @@ While there are many opportunities for specific implementations of the IProcesso
     \label{fig:classes-4-messages}
 \end{figure}
 \paragraph{Messages}
-Compared to the first prototype's design, the data-structures that represent messages were mostly unchanged. However, during implementation and testing of the first prototype it became apparent that in some cases \enquote{historical} information about messages was required. This iteration of the design adds a list of \enquote{ProtocolData} instances to messages that specify information about the protocol, message headers and the payload (\enquote{ISource}). IProcessors and IEncoders append newly transformed or (de-)serialized ProtocolData instances to a message so over time, a message contains records of all those operations performed on it. This information can be useful in a number of cases like serialization: when a message is deserialized (e.g. the payload of a \ac{WS} message is extracted) on its way down a pipeline, important information about the formerly encapsulating protocol is lost (such as the \ac{WS} frame's flags). When a message is serialized on its way back up a pipeline, an IEncoder would have to generate this information or try and deduce it from the message, which is not always possible. However, since it can access the messages' history and former ProtocolData, it can read the original information and use this for serialization.
+Compared to the first prototype's design, the data-structures that represent messages are mostly unchanged (as shown in figure \ref{fig:classes-4-messages}). However, during implementation and testing of the first prototype it became apparent that in some cases \enquote{historical} information about messages was required. This iteration of the design adds a list of \enquote{ProtocolData} instances to messages that specify information about the protocol, message headers and the payload (\enquote{ISource}). IProcessors and IEncoders append newly transformed or (de-)serialized ProtocolData instances to messages. So over time, a message contains records of all those operations performed on it. This information can be useful in a number of cases like serialization: when a message is deserialized (e.g. the payload of a \ac{WS} message is extracted) on its way down a pipeline, important information about the formerly encapsulating protocol is lost (such as the \ac{WS} frame's flags). When a message is serialized on its way back up a pipeline, an IEncoder would have to generate this information or try and deduce it from the message, which is not always possible. However, since it can access the messages' history and former ProtocolData, it can read the original information and use this for serialization.
 
 \section{Design \#2: Distributed Proxy Application}
 \label{sec:design-2}
-The design shown in the previous section was an iteration of the design worked out for the first prototype in section \ref{sec:prototype-design} and addressed some fundamental, architectural flaws and aimed for better flexibility and more meaningful interface definitions. However, it did not address another technical problem that was encountered during the implementation of the first prototype: constraints in platform, framework and programming language compatibility. 
-%TODO: describe changes to overview, describe registry/port interfaces
-
+The design shown in the previous section was an iteration of the design worked out for the first prototype in section \ref{sec:prototype-design} and addressed some fundamental, architectural flaws and aimed for better flexibility and more meaningful interface definitions. However, it did not address other problems that were encountered during the implementation of the first prototype: constraints in platform, framework and programming language compatibility and flexibility. As a consequence of these constraints, the proxy application needed to be developed as a monolithic application. Therefore, each extension, like additional IEncoders that added support for new protocols, was required to be implemented in the same programming language and run on the same platform and as part of the same process as the proxy application. This also effectively limited the available selection of libraries. Another potential problem of the former design concept was the tight coupling of pipes and the deeply nested structure and hierarchy of state-machines, pipes and network stacks. While this architecture allowed to implement routing messages through composition (\emph{by design}), it greatly added to the runtime complexity and made debugging the application significantly harder.
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{img/ch05/component-view2-1.pdf}
     \captionof{figure}{?} %TODO: Describe
     \label{fig:component-view2-1}
 \end{figure}
-\paragraph{Messages}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=4cm]{img/ch05/component-view2-2-remote-unit.pdf}
-    \captionof{figure}{?} %TODO: Describe
-    \label{fig:component-view2-2-remote-unit}
-\end{figure}
-\paragraph{Messages}
-\begin{figure}[h]
+\paragraph{Overview}
+Another iteration of the design (shown in figure \ref{fig:component-view2-1}) was made to address these issues. While the \enquote{Message IO} and \enquote{Site} components are left unchanged, the global state-machine is replaced by the \enquote{Registry} and \enquote{PipelineRepository} components that allow for de-centralized and more controlled processing of messages.
+\begin{figure}[ht]
     \centering
     \includegraphics[width=14cm]{img/ch05/component-view2-3-registry-port-unit.pdf}
     \captionof{figure}{?} %TODO: Describe
     \label{fig:component-view2-3-registry-port-unit}
 \end{figure}
 
-%\paragraph{Software Architecture} The system employs a server-client architecture that allows to
+\paragraph{Registry and Units} To implement de-centralized processing of messages, a central registry is required to register remote processing units (shown in figure \ref{fig:component-view2-3-registry-port-unit}). The central registry is represented by the \enquote{IRegistry} interface that allows remote units to register themselves and allows the PipelineRepository to request sessions to units that implement requested features. Remote units can be remote machines that implement the \enquote{IPort} interface that provides a list of \enquote{IUnit} instances. An IUnit implements one or more \enquote{Features}, such as specific (de-)serialization or other processing, and effectively provides IEncoder and IProcessor functionalities. This transforms formerly direct calls to IEncoders and IProcessors to \acp{RPC}. Since IEncoders and IProcessors can be stateful, IUnits initialize them in \enquote{ISessions} for each requested feature. The IRegistry and IPort interfaces are explicitly kept rather simple and unspecific to the exact means of communication between them so that they can be implemented in various ways, making use of various \ac{IPC} techniques.\\
+Also, to transmit data between the proxy application and its remote units, this data needs to be (de-)serialized and a format for serialization has to be chosen.
 
-\emph{TBD} %TODO
+\paragraph{PipelineRepository} The PipelineRepository component holds information about all configured pipelines (that is a flattened representation of the hierarchically configured state-machines and network stacks) and their contexts. This allows to remove the pipes from the software architecture, providing better traceability of messages throughout the system and makes debugging the high-level application logic more accessible. Also, organizing network stacks and state-machines in one central place encourages creation of means to interface with these mechanisms such as \ac{REST}-\acp{API} that let penetration testers inspect the message queue and ongoing processes.
+
+\paragraph{State of the Design Concept} This design concept promises to solve severe issues of the previous design iteration shown in section \ref{sec:design-1} and already defines some very high-level components. However, due to time constraints some components' designs were not  finished and require further work on specifics. For this, certain questions need to be answered and translated into the design:
 \begin{itemize}
-    \item \emph{Stream-based: treat communication as streams. message-based systems are simpler and supported by design}
-    \item \emph{Server-client: proxy is server, client can interface to control + monitor, communication via REST + WS}
-    \item \emph{State-machine: active network stack/pipeline dependent on state of the connection}
-    \item \emph{NetStacks: series of pipelines, bound to states}
-    \item \emph{Pipes: basic pipes, loose routing, injectable, specialized, generic processors + specialized encoders}
-    \item \emph{Factory: parse state-machine and netstack configuration and instantiate + configure instances}
+    \item \textbf{PipelineRepository:} How exactly is the hierarchy of state-machines and network stacks flattened? How is this flattened hierarchy represented in data-structures? How are instances of individual state-machines and network stacks initialized and organized for individual gateway-connections?
+    \item \textbf{ISession:} How is information relevant to IEncoder and IProcessor instances (such as ScriptProcessors' Script instances) passed to remote units?
+    \item \textbf{IRegistry/IPort:} How exactly are \acp{RPC} performed? Are there mature and appropriate frameworks that provide \acp{RPC} implementations?
+\end{itemize}
+
+
+\section{Comparison of Both Designs}
+\label{sec:design-comparison}
+Both design concepts discussed in the previous sections, the monolithic and the distributed concept, promise to solve specific problems. The following paragraphs compare both concepts on the base of a set of core design aspects:
+\paragraph{Software architecture}
+% Monolithic: self-contained application, app + all extensions written in the same language, executed on the same platform
+% Distributed: business logic implemented in the proxy app, extensions such as encoding done by remote units that are platform and programming language agnostic
+\paragraph{Complexity}
+% Monolithic: business-logic is hard to debug due to complex nested structures, extensions are simple to debug
+% Distributed: business-logic is simple to debug (pipes.rip), extensions are harder to debug due to distributed setup (connection losses, remote machines, remote debuggers?)
+\paragraph{Maturity}
+% Monolithic: pipes were tested before and improved, new concepts are untested but at least the design is complete and consistent
+% Distributed: some aspects were simplified (pipes removed), however some core and non-trivial aspects are not fully specified
+
+While its underlying ideas potentially hold a lot of promise, they also introduce new problems:
+\begin{itemize}
+    \item \textbf{De-centralization:} The de-centralized approach to processing messages greatly increases the application's complexity on multiple levels.
 \end{itemize}
