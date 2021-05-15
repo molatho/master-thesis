@@ -20,11 +20,12 @@ To choose the tools for implementing the design concept, a list of requirements 
 
 It was found that Python satisfied all of these requirements:
 \begin{itemize}
+    \item Python is a free, open source and general purpose programming language that was first released in 1991 and is being continuously improved and updated. % 978-0-262-52962-4
     \item The built-in \emph{exec}\footnote{https://docs.python.org/3/library/functions.html\#exec} function provides execution of arbitrary Python code at runtime. Although it is infamous for its security implications, it is very suitable for scripting.
     \item The \ac{PyPI} is a public repository of more than 300.000\footnote{Based on \ac{PyPI}'s statistics: https://pypi.org/} Python packages that can be installed using the \emph{pip} command-line tool. There are numerous packages that implement the protocols \ac{WS}, \ac{MQTT} and \ac{HTTP}.
-    \item Python supports multiple ways to deploy projects, including packaging\footnote{https://packaging.python.org/overview/\#bringing-your-own-python-executable}, freezing and containerization\footnote{e.g. using Docker https://hub.docker.com/\_/python/}.
-    \item Its comparatively simple syntax and \enquote{pythonic} programming paradigm make Python an accessible programming language. Also, its optional static typing allows to omit redundant type information for simple methods and to provide explicit type information for complex pieces of code like interfaces.
-\end{itemize}
+    \item Python supports multiple ways to deploy projects, including packaging projects into executable files \footnote{https://packaging.python.org/overview/\#bringing-your-own-python-executable} and containerization\footnote{e.g. using Docker https://hub.docker.com/\_/python/}.
+    \item Its comparatively simple syntax and its design philosophy that values accessible code higher than performance\footnote{Described in 19 aphorisms in \enquote{The Zen of Python} (https://www.python.org/dev/peps/pep-0020/)} encourage readability and maintainability in Python projects. When implemented, this makes Python an accessible programming language. Also, its optional static typing allows to omit redundant type information for simple methods and to provide explicit type information for complex and shared pieces of code like algorithms and interfaces.
+\end{itemize} %TODO: Python is free?
 Git was used for version-control and Microsoft Visual Studio Code was the \ac{IDE} used for implementation.
 
 \begin{figure}[h]
@@ -40,9 +41,18 @@ Git was used for version-control and Microsoft Visual Studio Code was the \ac{ID
 
 \subsection{Network Stack}
 \subsubsection{Gateways}
-\subsubsection{Pipes, Encoders and Processors}
+The protocols used in scenario \#2 that net-riot was implemented for were using \ac{TCP} for transport. Therefore, net-riot implemented a \ac{TCP}-Gateway that allowed it to create \ac{TCP} server sockets to listen on for incoming connection requests. For incoming connections C\textsubscript{I}, respective outgoing connections C\textsubscript{O} were initialized and connected to a preconfigured remote server. For each of those connections, \enquote{TcpPipe} instances P\textsubscript{I} and P\textsubscript{O} were initialized that ran in separate threads and accepted incoming packets. The gateway then initialized \enquote{TcpGatewayPipe} instances with P\textsubscript{I} and P\textsubscript{O} that routed messages originating from the TcpPipes into the pipeline and from the pipeline to the correct TcpPipe instance.
+% TCP Gateway
+
+\subsubsection{Encoders}
+% Libraries used
+
 \subsubsection{Scripting}
-\subsubsection{Pipelines}
+% Exec?
+%\subsubsection{Pipelines}
 
 \subsection{Configuration Parsing and Building}
+\subsubsection{JSON Configuration and Schemas}
+% Schema: definitions, flat hierarchy
 \subsubsection{Factories, Builders and Templates}
+% Site + NetRiotConfig + Templates + Reflection
