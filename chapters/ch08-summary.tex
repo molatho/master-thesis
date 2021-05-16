@@ -1,29 +1,29 @@
 % 7. Zusammenfassung
 \chapter{Summary}
 \label{chap:summary}
-This chapter provides a summary of the concept shown in chapter \ref{chap:conceptual-design} and the implementation thereof in chapter \ref{chap:implementation}.
+This chapter provides a summary of the design concepts shown in chapter \ref{chap:conceptual-design} and the implementation thereof in chapter \ref{chap:implementation}.
 
-\section{Requirements Engineering}
-\label{sec:summary-requirements-engineering}
+%\section{Requirements Engineering}
+%\label{sec:summary-requirements-engineering}
+%The example scenarios presented in section \ref{sec:example-scenarios} provide a set of basic requirements to a modular and extensible proxy application. An exemplaric implementation of a module proxy application was performed in section \ref{sec:prototype-implementation} which adds important insights into the problem space that were used to extend the interview guide discussed in section \ref{sec:interviews}. The conducted interviews help understanding the everyday work of penetration testers and security researchers, pointing out practical challenges they encounter and workflows they employ. This enriched the initial set of requirements listed in \ref{sec:example-scenarios} to a set of six functional requirements and 5 non-functional requirements that were used to create design concepts for implementation.
 
-\section{Concept}
+\section{Design Concepts}
 \label{sec:summary-concept}
-\emph{TBD:}
-\begin{itemize}
-    \item \emph{Pipelines + \acp{FSM} lead to tricky debugging. Decouple them and introduce a queue (+metadata) per connection.}
-\end{itemize}
+In chapter \ref{chap:conceptual-design}, the rough and vague design of the first prototype discussed in section \ref{sec:prototype-design} was further refined over the course of two iterations.\\
+The first design concept presented in section \ref{sec:design-1} describes a monolithic proxy application that builds on the basic initial design which makes extensive use of the pipes and filters design pattern for message routing. At its core it sends and receives packets (\emph{messages}) through gateways and (de-)serializes and transforms them through network stacks. It also features state-machines that allow implementation of complex logic of message (de-)serialization and transformation by allowing the binding of individual network stacks to states and triggering state transitions programmatically through the use of scripts. This results in a potentially deeply nested hierarchy of state-machines and network stacks.\\
+The second design concept discussed in section \ref{sec:design-2} is an iteration of the monolithic design concept and describes a distributed proxy application that isolates (de-)serialization and transformation of messages from the internal proxy application logic. To decouple these low-level tasks from the high-level application logic of the proxy application, the concept introduces interfaces for remote units that provide access to specific features (i.e. (de-)serialization) and an interface for the central proxy application that allowed registering these remote units. Also, the nested hierarchy of state-machines and network stacks is flattened and organized centrally in a repository in the central proxy application.\\
+Both concepts feature distinct advantages and disadvantages and are compared in section \ref{sec:design-comparison}.
 
 \section{Implementation}
 \label{sec:summary-implementation}
+Chapter \ref{chap:implementation} shows an exemplaric implementation of the first design concept discussed in section \ref{sec:design-1} under the working title \enquote{net-riot}. The monolithic design concept was chosen for implementation due to its proven core ideas and its comparatively high maturity. The second example scenario presented in section \ref{sec:example-scenarios} is used for reference because it features a nested communication stack and a corresponding testbed was already implemented in section \ref{sec:prototype-testing}. For this implementation, Python is used because of its flexibility, low barrier of entry and rich package ecosystem.\\
+Since the reference scenario makes use of the \ac{HTTP}, \ac{WS} and \ac{MQTT} protocols that used \ac{TCP} as an underlying transport protocol, \ac{TCP} gateways are implemented in net-riot as a \ac{MITM} interface that external devices such as \ac{IoT} devices and cloud server connect to. For \ac{HTTP} (de-)serialization, net-riot implements a custom encoder while for \ac{WS} and \ac{MQTT} existing libraries are used.\\
+For representation of stacked communication protocols (such as \ac{MQTT} being transported via \ac{WS}), network stacks and state-machines were implemented: network stacks bundle a series of connected pipes that perform operations on messages, such as (de-)serializing and manipulating messages. State-machines allow selecting which network stacks to actively use by binding them to individual states. State-machines regularly evaluate their context and check whether states should be changed dependent on their registered transitions' rules. These ScriptRules execute scripts which can examine and manipulate the states' and state-machines' context information.\\
+A central task left open for implementation by the design concept is the configuration of the proxy application for specific scenarios and the resulting dynamic instantiation and parametrisation of state-machines and network stacks. In net-riot, \ac{JSON} files and schemas were used for configuration specification and validation. Also, a recursive variance of the abstract factory design pattern was implemented for dynamic instantiation of objects defined in the configuration files. Figure \ref{fig:cloc} shows the output of the \enquote{cloc} utility program executed on net-riot's source code. %The two \ac{JSON} configuration files (one for the reference scenario and a simple one for testing) and the \ac{JSON} schema make up more than a quarter of net-riot's source-code, showing that the explicit nature of its configurations  
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=12cm]{img/ch06/cloc.png}
-    \captionof{figure}{?} %TODO: Describe
+    \includegraphics[width=12cm]{img/ch06/cloc2.png}
+    \captionof{figure}{The lines of code in net-riot calculated by the \enquote{cloc} utility program.} %TODO: Describe
     \label{fig:cloc}
 \end{figure}
-\emph{TBD:}
-\begin{itemize}
-    \item \emph{Discuss technical debt!}
-    \item \emph{Large config files: bad usability, also confusing}
-\end{itemize}
