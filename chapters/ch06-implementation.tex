@@ -12,10 +12,10 @@ The prototype had the working title \enquote{net-riot}, which indicated that thi
 \label{sec:tool-selection}
 To choose the tools for implementing the design concept, a list of requirements to tools was inferred from the software requirements discussed and expert interviews shown in chapter \ref{chap:understanding-the-problem-space}:
 \begin{itemize}
-    \item [\textbf{F1}] \textbf{Scripting:} The tool must provide scripting capabilities that allow penetration testers to execute complex scripted operations on messages.
-    \item [\textbf{F2}] \textbf{Libraries:} In order to avoid custom implementation of the \ac{HTTP}, \ac{WS} and \ac{MQTT} protocols, the tool must provide a rich set of libraries that can be used to work with said protocols.
-    \item [\textbf{F3}] \textbf{Deployment:} To allow the prototype to be installed in an uncomplicated way, the tool must provide or support mechanisms that simplify deployment, such as code compilation and static linking of dependencies or containerization.
-    \item [\textbf{F4}] \textbf{Accessibility:} The tool must be powerful and complex enough to solve the software requirements and implement the design concept, but it must also feature a \enquote{barrier or entry} that is low enough so extending the application is feasible for open source developers.
+    \item [\textbf{T1}] \textbf{Scripting:} The tool must provide scripting capabilities that allow penetration testers to execute complex scripted operations on messages.
+    \item [\textbf{T2}] \textbf{Libraries:} In order to avoid custom implementation of the \ac{HTTP}, \ac{WS} and \ac{MQTT} protocols, the tool must provide a rich set of libraries that can be used to work with said protocols.
+    \item [\textbf{T3}] \textbf{Deployment:} To allow the prototype to be installed in an uncomplicated way, the tool must provide or support mechanisms that simplify deployment, such as code compilation and static linking of dependencies or containerization.
+    \item [\textbf{T4}] \textbf{Accessibility:} The tool must be powerful and complex enough to solve the software requirements and implement the design concept, but it must also feature a \enquote{barrier or entry} that is low enough so extending the application is feasible for open source developers.
 \end{itemize}
 
 It was found that Python satisfied all of these requirements:
@@ -35,7 +35,7 @@ The following sections discuss especially challenging aspects of net-riot's impl
 
 \subsection{Gateways}
 The protocols used in scenario \#2 (\ac{HTTP}, \ac{WS} and \ac{MQTT}) are used on top of \ac{TCP}. Therefore, net-riot implemented a \ac{TCP}-Gateway that allowed it to create \ac{TCP} server sockets to listen on for incoming connection requests. For incoming connections C\textsubscript{I}, respective outgoing connections C\textsubscript{O} were initialized and connected to a preconfigured remote server. For each of those connections, \enquote{TcpPipe} instances P\textsubscript{I} and P\textsubscript{O} were initialized that ran in separate threads and accepted incoming packets. The gateway then initialized \enquote{TcpGatewayPipe} instances with P\textsubscript{I} and P\textsubscript{O} that routed messages originating from the TcpPipes into the pipeline and from the pipeline to the correct TcpPipe instance.\\
-Messages that originated from gateways were temporarily stored in a queue so that only a single message was processed in the pipeline at any given time. It was found that if multiple messages were processed simultaneously, the global state-machine could change states while a message was still being processed in a then inactive state, resulting in this state's network stack being left unconnected and unable to route the message back up the pipeline. For the same reason, net-riot only supported one single connection.  
+Messages that originated from gateways were temporarily stored in a queue so that only a single message was processed in the pipeline at any given time. It was found that if multiple messages were processed simultaneously, the global state-machine could change states while a message was still being processed in a then inactive state, resulting in this state's network stack being left unconnected and unable to route the message back up the pipeline. For the same reason, net-riot only supported one single connection.
 
 
 \subsection{Encoders}
