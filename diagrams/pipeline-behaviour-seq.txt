@@ -1,0 +1,43 @@
+#https://sequencediagram.org/
+title Pipeline Behaviour
+
+activate External Trigger
+External Trigger->Pipe 1: relay O
+
+activate Pipe 1
+Pipe 1->Pipe 1:process O
+activate Pipe 1
+space
+deactivate Pipe 1
+
+Pipe 1->Pipe 2:relay O
+activate Pipe 2
+Pipe 2->Pipe 2:process O
+activate Pipe 2
+space
+deactivate Pipe 2
+
+Pipe 2->Pipe n-1: relay O
+activate Pipe n-1
+Pipe n-1->Pipe n-1:process O
+activate Pipe n-1
+space
+deactivate Pipe n-1
+
+Pipe n-1->Pipe n: relay O
+activate Pipe n
+Pipe n->Pipe n:process O
+activate Pipe n
+space
+deactivate Pipe n
+
+Pipe n->Pipe n-1:return O
+deactivate Pipe n
+
+Pipe n-1-->Pipe 2: return O
+deactivate Pipe n-1
+Pipe 2-->Pipe 1:return O
+deactivate Pipe 2
+
+External Trigger<-Pipe 1:return O
+deactivate Pipe 1

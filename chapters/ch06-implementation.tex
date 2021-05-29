@@ -1,7 +1,7 @@
 % 5. Prototyp (Implementierung, Patterns, Tests)
 \chapter{Implementing the Modular Proxy Application}
 \label{chap:implementation}
-This chapter covers an exemplaric implementation of the concept that was worked out in chapter \ref{chap:conceptual-design}, starting with formally describing the goals and constraints of this implementation in section \ref{sec:goals-constraints}. Afterwards, an overview and comparison of available and suitable tools for the task is performed in section \ref{sec:tool-selection}. The chapter concludes with details about the implementation of individual components in section \ref{sec:individual-components}, describing how specific challenges were overcome.% and what design patterns were used.
+This chapter covers an exemplaric implementation of the monolithic concept that was worked out in section \ref{sec:design-1}, starting with formally describing the goals and constraints of this implementation in section \ref{sec:goals-constraints}. Afterwards, an overview and comparison of available and suitable tools for the task is performed in section \ref{sec:tool-selection}. The chapter concludes with details about the implementation of individual components in section \ref{sec:individual-components}, describing how specific challenges were overcome.% and what design patterns were used.
 
 \section{Goals and Constraints}
 \label{sec:goals-constraints}
@@ -18,7 +18,7 @@ To choose the tools for implementing the design concept, a list of requirements 
     \item [\textbf{T4}] \textbf{Accessibility:} The tool must be powerful and complex enough to solve the software requirements and implement the design concept, but it must also feature a \enquote{barrier or entry} that is low enough so extending the application is feasible for open source developers.
 \end{itemize}
 
-It was found that Python satisfied all of these requirements:
+Regarding the selection of a suitable programming language, it was found that Python satisfied all of these requirements:
 \begin{itemize}
     \item Python is a free, open source and general purpose programming language that was first released in 1991 and is being continuously improved and updated. % 978-0-262-52962-4
     \item The built-in \emph{exec}\footnote{https://docs.python.org/3/library/functions.html\#exec} function provides execution of arbitrary Python code at runtime. Although it is infamous for its security implications, it is very suitable for scripting.

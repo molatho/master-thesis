@@ -10,7 +10,7 @@
 \frontmatter
 
 \setcounter{page}{0}
-\changefont{ptm}{m}{n}  
+\changefont{ptm}{m}{n}
 \renewcommand{\rmdefault}{ptm}
 
 \input{titelblatt}
@@ -51,13 +51,13 @@
 
 \cleardoublepage
 \phantomsection
-\addcontentsline{toc}{chapter}{\hsmalistoftables}
-\listoftables
+\addcontentsline{toc}{chapter}{\hsmalistoffigures}
+\listoffigures
 
 \cleardoublepage
 \phantomsection
-\addcontentsline{toc}{chapter}{\hsmalistoffigures}
-\listoffigures
+\addcontentsline{toc}{chapter}{\hsmalistoftables}
+\listoftables
 
 \cleardoublepage
 \phantomsection
@@ -67,8 +67,8 @@
 \begingroup
 \cleardoublepage
 \begin{flushleft}
-\let\clearpage\relax 
-\printbibliography
+    \let\clearpage\relax
+    \printbibliography
 \end{flushleft}
 \endgroup
 

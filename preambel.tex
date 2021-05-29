@@ -1,15 +1,15 @@
 % Dokumententyp und benutzte Pakete
 \documentclass[open=right,  % Kapitel darf nur auf rechten Seite beginnen
-    paper=a4,               % DIN-A4-Papier
-    fontsize=12pt,          % Schriftgöße
-    headings=small,         % Kleine Überschriften
-    headsepline=true,       % Trennlinie am Kopf der Seite
-    footsepline=false,      % Keine Trennlinie am Fuß der Seite
-    bibliography=totoc,     % Literaturverzeichnis in das Inhaltsverzeichnis aufnehmen
-    twoside=on,             % Doppelseitiger Druck - auf off stellen für einseitig
-    DIV=7,                  % Verhältnis der Ränder zum bedruckten Bereich
-    chapterprefix=true,     % Kapitel x vor dem Kapitelnamen
-    cleardoublepage=plain]{scrbook}
+  paper=a4,               % DIN-A4-Papier
+  fontsize=12pt,          % Schriftgöße
+  headings=small,         % Kleine Überschriften
+  headsepline=true,       % Trennlinie am Kopf der Seite
+  footsepline=false,      % Keine Trennlinie am Fuß der Seite
+  bibliography=totoc,     % Literaturverzeichnis in das Inhaltsverzeichnis aufnehmen
+  twoside=on,             % Doppelseitiger Druck - auf off stellen für einseitig
+  DIV=7,                  % Verhältnis der Ränder zum bedruckten Bereich
+  chapterprefix=true,     % Kapitel x vor dem Kapitelnamen
+  cleardoublepage=plain]{scrbook}
 
 % Pakete einbinden, die benötigt werden
 \usepackage{ifthen}               % Logische Bedingungen mit ifthenelse
@@ -22,18 +22,18 @@
 % Setzen von Optionen abhängig von der gewählten Sprache. Die Sprache wird
 % in thesis.tex gesetzt.
 \ifthenelse{\equal{\hsmasprache}{de}}%
-  {%
-   \usepackage[main=ngerman, english]{babel}  % Deutsche Sprachunterstützung
-   \usepackage[autostyle=true,german=quotes]{csquotes} % Deutsche Anführungszeichen
-   \usepackage[pagebackref=false,german]{hyperref} % Hyperlinks
-   \newcommand{\hsmasortlocale}{de_DE} % Sortierung der Literatur
-  }%
-  {%
-   \usepackage[main=english, ngerman]{babel} % Englische Sprachunterstützung
-   \usepackage[autostyle=true,english=american]{csquotes} % Englische Anführungszeichen
-   \usepackage[pagebackref=false,english]{hyperref}  % Hyperlinks
-   \newcommand{\hsmasortlocale}{en_US} % Sortierung der Literatur
-  }%
+{%
+  \usepackage[main=ngerman, english]{babel}  % Deutsche Sprachunterstützung
+  \usepackage[autostyle=true,german=quotes]{csquotes} % Deutsche Anführungszeichen
+  \usepackage[pagebackref=false,german]{hyperref} % Hyperlinks
+  \newcommand{\hsmasortlocale}{de_DE} % Sortierung der Literatur
+}%
+{%
+  \usepackage[main=english, ngerman]{babel} % Englische Sprachunterstützung
+  \usepackage[autostyle=true,english=american]{csquotes} % Englische Anführungszeichen
+  \usepackage[pagebackref=false,english]{hyperref}  % Hyperlinks
+  \newcommand{\hsmasortlocale}{en_US} % Sortierung der Literatur
+}%
 \usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
 \usepackage{xcolor}               % Unterstützung für Farben
 \usepackage{amsmath}              % Mathematische Formeln
@@ -59,21 +59,21 @@
 \usepackage[backend=biber,
   isbn=false,                     % ISBN nicht anzeigen, gleiches geht mit nahezu allen anderen Feldern
   sortlocale=en_EN,     % Sortierung der Einträge für Deutsch
-                                  %      de_DE: für Deutsch
-                                  %      en_US: für Englisch
+  %      de_DE: für Deutsch
+  %      en_US: für Englisch
   autocite=inline,                % regelt Aussehen für \autocite
-                                  %      inline: Zitat in Klammern (\parancite)
-                                  %      footnote: Zitat in Fußnoten (\footcite)
-                                  %      plain: Zitat direkt ohne Klammern (\cite)
+  %      inline: Zitat in Klammern (\parancite)
+  %      footnote: Zitat in Fußnoten (\footcite)
+  %      plain: Zitat direkt ohne Klammern (\cite)
   style=numeric,               % Legt den Stil für die Zitate fest
-                                  %      ieee: Zitate als Zahlen [1]
-                                  %      alphabetic: Zitate als Kürzel und Jahr [Ein05]
-                                  %      authoryear: Zitate Author und Jahr [Einstein (1905)]
+  %      ieee: Zitate als Zahlen [1]
+  %      alphabetic: Zitate als Kürzel und Jahr [Ein05]
+  %      authoryear: Zitate Author und Jahr [Einstein (1905)]
   hyperref=true,                  % Hyperlinks für Zitate
   citestyle=numeric,
   firstinits=false                % Vornamen abkürzen (Maier, M. anstatt Maier, Markus)?
-                                  %      true: abkürzen
-                                  %      false: nicht abkürzen
+  %      true: abkürzen
+  %      false: nicht abkürzen
 ]{biblatex}                       % Literaturverwaltung mit BibLaTeX
 \usepackage{rotating}             % Seiten drehen
 \usepackage{harveyballs}          % Harveyballs
@@ -108,40 +108,40 @@
 
 % Einstellungen für das Hyperlink-Paket
 \hypersetup{
-    colorlinks=true,      % Farbige links verwenden
-%    allcolors=linkblue,
-    linktoc=all,          % Links im Inhaltsverzeichnis
-    linkcolor=linkblack,  % Querverweise
-    citecolor=linkblack,  % Literaturangaben
-    filecolor=linkblack,  % Dateilinks
-    urlcolor=linkblack    % URLs
+  colorlinks=true,      % Farbige links verwenden
+  %    allcolors=linkblue,
+  linktoc=all,          % Links im Inhaltsverzeichnis
+  linkcolor=linkblack,  % Querverweise
+  citecolor=linkblack,  % Literaturangaben
+  filecolor=linkblack,  % Dateilinks
+  urlcolor=linkblack    % URLs
 }
 
 % Einstellungen für Quelltexte
 \lstset{
-      xleftmargin=0.2cm,
-      basicstyle=\footnotesize\ttfamily,
-      keywordstyle=\color{darkgreen},
-      identifierstyle=\color{darkblue},
-      commentstyle=\color{comment},
-      stringstyle=\color{darkred},
-      tabsize=2,
-      lineskip={2pt},
-      columns=flexible,
-      inputencoding=utf8,
-      captionpos=b,
-      breakautoindent=true,
-      breakindent=2em,
-      breaklines=true,
-      prebreak=,
-      postbreak=,
-      numbers=none,
-      numberstyle=\tiny,
-      showspaces=false,      % Keine Leerzeichensymbole
-      showtabs=false,        % Keine Tabsymbole
-      showstringspaces=false,% Leerzeichen in Strings
-      morecomment=[s][\color{javadoccomment}]{/**}{*/},
-      literate={Ö}{{\"O}}1 {Ä}{{\"A}}1 {Ü}{{\"U}}1 {ß}{{\ss}}2 {ü}{{\"u}}1 {ä}{{\"a}}1 {ö}{{\"o}}1
+xleftmargin=0.2cm,
+basicstyle=\footnotesize\ttfamily,
+keywordstyle=\color{darkgreen},
+identifierstyle=\color{darkblue},
+commentstyle=\color{comment},
+stringstyle=\color{darkred},
+tabsize=2,
+lineskip={2pt},
+columns=flexible,
+inputencoding=utf8,
+captionpos=b,
+breakautoindent=true,
+breakindent=2em,
+breaklines=true,
+prebreak=,
+postbreak=,
+numbers=none,
+numberstyle=\tiny,
+showspaces=false,      % Keine Leerzeichensymbole
+showtabs=false,        % Keine Tabsymbole
+showstringspaces=false,% Leerzeichen in Strings
+morecomment=[s][\color{javadoccomment}]{/**}{*/},
+literate={Ö}{{\"O}}1 {Ä}{{\"A}}1 {Ü}{{\"U}}1 {ß}{{\ss}}2 {ü}{{\"u}}1 {ä}{{\"a}}1 {ö}{{\"o}}1
 }
 
 \urlstyle{same}
@@ -187,24 +187,24 @@
 \clubpenalty = 10000         % Keine "Schusterjungen"
 \widowpenalty = 10000        % Keine "Hurenkinder"
 \displaywidowpenalty = 10000 % Keine "Hurenkinder"
-                             % Siehe: https://de.wikipedia.org/wiki/Hurenkind_und_Schusterjunge
+% Siehe: https://de.wikipedia.org/wiki/Hurenkind_und_Schusterjunge
 
 % Index erzeugen
 \makeindex
 
 % Einfacher Font-Wechsel über dieses Makro
 \newcommand{\changefont}[3]{
-\fontfamily{#1} \fontseries{#2} \fontshape{#3} \selectfont}
+  \fontfamily{#1} \fontseries{#2} \fontshape{#3} \selectfont}
 
 % Eigenes Makro für Bilder. Das label (für \ref) ist dann einfach
 % der Name der Bilddatei
 \newcommand{\bild}[3]{
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=#2]{#1}
-  \caption{#3}
-  \label{#1}
-\end{figure}}
+  \begin{figure}[ht]
+    \centering
+    \includegraphics[width=#2]{#1}
+    \caption{#3}
+    \label{#1}
+  \end{figure}}
 
 % Wo liegt Sourcecode?
 \newcommand{\srcloc}{src/}
@@ -230,3 +230,5 @@
 % Checklisten mit zwei Ebenen
 \newlist{checklist}{itemize}{2}
 \setlist[checklist]{label=$\square$}
+
+\usepackage{tablefootnote}
