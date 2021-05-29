@@ -52,7 +52,7 @@ This distributed communication setup introduces a set of possible attacks that c
     \item Attackers that impersonate the remote server could drop or manipulate incoming publish packets, thus altering whether and/or what information is relayed other connected devices. For example, temperature readings that indicate a high environment temperature that would lead to the \ac{A/C} unit to be powered up could be rewritten in such a way that the transmitted temperature value is considered to indicate a low environment temperature, thus preventing the \ac{A/C} unit from running automatically.
 \end{itemize}
 
-\begin{figure}[h!]
+\begin{figure}[h]
     \centering
     \includegraphics[width=6cm]{img/ch04/Statemachine 2.pdf}
     \captionof{figure}{State machine of \ac{AWS} \ac{IoT} communication}
@@ -65,7 +65,7 @@ This scenario makes use of three communication protocols, uses these protocols d
 \subsubsection{Scenario \#3: Water Treatment Plant}
 \label{par:scenario-3}Similar to scenario \#2, this scenario makes use of \ac{MQTT} for transporting messages. However, the scenario takes place in an \ac{ICS} context of critical infrastructure.
 
-\begin{figure}[hb]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=12cm]{img/ch04/watertreatmentplant.png}
     \caption[Illustration of a typical drinking water treatment process. (by the CK-12 Foundation)]{Illustration of a typical drinking water treatment process. (by the CK-12 Foundation)\protect\footnotemark}
@@ -378,11 +378,21 @@ Also, the questions raised in section \ref{sec:prototype-insights} were answered
 %Q2: Do penetration testers require exact control over the implementation of protocols?
 %Q3: Are there strict timing requirements during penetration tests?
 These insights were translated into the following, new non-functional requirements:
-\begin{itemize}
-    \item [\textbf{N4}] \textbf{Extensibility:} To allow for future implementation of further communication protocols the software shall be implemented in a modular fashion.
-    \item [\textbf{N5}] \textbf{Deployment:} To allow the proxy application to be installed and used in a repeatable and reliable way, the proxy application shall be distributed using a deployment system.
-\end{itemize}
 
+\begin{center}
+    \begin{tabular}{|p{1cm}|p{12cm}|}
+        \hline
+        \textbf{N4} & \textbf{Extensibility}                                                                                                                      \\ \hline
+        \multicolumn{2}{|p{12cm}|}{To allow for future implementation of further communication protocols the software shall be implemented in a modular fashion.} \\ \hline
+    \end{tabular}
+\end{center}
+\begin{center}
+    \begin{tabular}{|p{1cm}|p{12cm}|}
+        \hline
+        \textbf{N5} & \textbf{Deployment}                                                                                                                                                           \\ \hline
+        \multicolumn{2}{|p{12cm}|}{To allow the proxy application to be installed and used in a repeatable and reliable way, the proxy application shall be distributed using a deployment system.} \\ \hline
+    \end{tabular}
+\end{center}
 
 \section{Analysis of Existing Software}
 \label{sec:analysis-existing-software}
