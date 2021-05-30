@@ -7,6 +7,8 @@ After that, section \ref{sec:information-security} will provide insights into re
 
 
 \section{Design Patterns}
+The following sub-sections introduce a set of design patterns that are of relevance to this work.
+
 \subsection{Pipeline/Pipes and Filters Pattern}
 In a paper from 1996, Alencar et al. describe the pipes and filters pattern as a mechanism to process streams of data \cite{alencar_cowan_lucena_1996}. They state that the pattern features \enquote{pipes} and \enquote{filters} components: pipes relay data streams between filters while the filters process the data streams' contents. Figure \ref{fig:dp-pipes-filters} shows an exemplaric sequence of $n$ pipes and filters relaying and processing an object $O$ by implementing pipes as method calls. Alencar et al. state that the pattern's \enquote{objective is to obtain highly reusable, interchangeable and maintainable applications}.
 \begin{figure}[h!]
@@ -21,19 +23,52 @@ Gamma et al. describe the intent of the abstract factory pattern as follows: "pr
     \item \enquote{AbstractProduct}: interface for products.
     \item \enquote{AbstractFactory}: interface for creating objects that implement \enquote{AbstractProduct}.
     \item \enquote{ConcreteProduct}: classes that implement \enquote{AbstractProduct}.
-    \item \enquote{ConcreteFactory}: classes that implements \enquote{AbstractFactory} and create \enquote{ConcreteProducs}. 
+    \item \enquote{ConcreteFactory}: classes that implements \enquote{AbstractFactory} and create \enquote{ConcreteProducts}.
+    \item \enquote{Client}: class that only uses the interfaces of \enquote{AbstractProducts} and \enquote{AbstractFactories}.
 \end{itemize}
 They conclude that there are multiple consequences to using the pattern, one being that it \enquote{isolates concrete classes}, meaning that there is a clear isolation from the Client and the ConcreteFactories.
 %CITE: 1996 Paper Design Patterns in Software Design Patterns
 %CITE: 1997 - Book - Design Patterns
 \subsection{Publish-Subscribe/Observer Pattern}
 %CITE: 1997 - Book - Design Patterns
-In their book \enquote{Design Patterns - Elements }, Gamma et al.
-\section{Computer Communication}
+In their book \enquote{Design Patterns - Elements of Reusable Object-oriented Software}, Gamma et al. state that the observer pattern aims to "define a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically" \cite{Gamma1998}. To achieve this, they propose the following components:
+\begin{itemize}
+    \item \enquote{Observer}: interface for observing objects. It defines a single \emph{Update} method.
+    \item \enquote{Subject}: interface for observable objects that can (un-)register \enquote{Observers} by defining \emph{Attach} and \emph{Detach} methods. It can notify its registered \enquote{Observers} by use of its \emph{Notify} method which calls all of its \enquote{Observers'} \emph{Update} methods.
+\end{itemize}
+Gamma et al. point out a number of benefits using this pattern. The \enquote{support for broadcast communication} is a benefit of particular relevance for this thesis as it puts a focus on the simplification of the process of sending notification to multiple, interested objects. For this reason, this pattern is used in communication protocols such as \ac{MQTT} (further elaborated on in section \ref{sec:iot-common-protocols}).
+
+
+\section{Computer Communication: The OSI-Model}
 \label{sec:computer-networks}
-\emph{TBD: OSI-Modell} %TODO
-%CITE: ISO/IEC 1994
-%TBD: Proxy?
+The \ac{OSI}-Model was initially proposed in the \ac{ISO}/\ac{IEC} standard \enquote{\ac{ISO} 7498 - Information processing systems — Open Systems Interconnection — Basic Reference Model} in 1984 and revised in 1994 by the \ac{ISO}/\ac{IEC} standard 7498-1 \cite{ISOIEC74981}. It aims to formalize a unified approach to communication between diverse peer systems by defining the \emph{network layers} shown in figure \ref{fig:osi-model}. These layers are read from bottom to top, increasing in complexity and abstraction:
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=14cm]{img/ch03/osi-model.png}
+    \captionof{figure}{\enquote{Seven layer reference model and peer protocols} \cite{ISOIEC74981} as proposed in \ac{ISO}/\ac{IEC} 7498.}
+    \label{fig:osi-model}
+\end{figure}
+\begin{enumerate}
+    \item Physical: Bitwise transmission of data (e.g. via copper cable or fibre glass).
+    \item Data Link: Aggregation of bitwise data into data frames (e.g. via Ethernet packets sent via \ac{WLAN}) and transmission of those frames to a communication destination.
+    \item Network: Encapsulates data frames into packets (e.g. \ac{IP} packets) and routes and relays those packets across network nodes that are identified by addresses (i.e. \ac{IP} addresses).
+    \item Transport: Splits packets of arbitrary lengths into transmissible packets and ensures their successful transmission (when using \ac{TCP}). Also, it servers as an abstraction layer for applications that operate on higher layers.
+    \item Session: Nowadays part of the \ac{TCP} protocol, the session layer handles establishing and terminating of connections between applications.
+    \item Presentation: Encoding information in a format accepted by all communication peers involved (i.e. \ac{XML} and \ac{JSON}).
+    \item Application: High-level application functionality that makes use of the lower layers to communicate with peers (e.g. \ac{HTTP}).
+\end{enumerate}
+This concept of a stack of network layers results in a series of encapsulated messages. For example, a large \ac{HTTP} response containing a binary file can be represented as follows over the various layers:
+\begin{etaremune}
+    \item Application: The \ac{HTTP} response itself.
+    \item Presentation: The text-based \ac{HTTP} headers and the binary content encoded as raw bytes.
+    \item \textit{(Session: Part of the \ac{TCP} protocol.)}
+    \item Transport: Multiple \ac{TCP} packets with a binary payload and header information about the source and destination ports.
+    \item Network: Multiple \ac{IP} packets with a binary payload and header information about the source and destination addresses.
+    \item Data Link: Multiple Ethernet frames with a binary payload and header information about the source and destination peer's \ac{MAC} addresses.
+    \item \textit{(Physical: Stream of individual bits that make up the Ethernet frames.)}
+\end{etaremune}
+may be split into multiple TCP packets (with \ac{TCP} specific header information such as source and destination ports), which are encapsulated in an \ac{IP} packet ()
+
 
 \section{(Industrial) Internet of Things}
 \label{sec:internet-of-things}
