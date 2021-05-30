@@ -3,23 +3,32 @@
 This chapter provides an overview of the technologies and concepts referred to in subsequent chapters.
 Starting with section \ref{sec:computer-networks}, essential concepts of computer communication in networks will be presented and examined, covering the concept of network layers, intercepting of communication between two parties and analysis of transferred data.
 Building upon these fundamentals, section \ref{sec:internet-of-things} introduces the fields of use of \ac{IoT} applications, common architectures used today to implement them and popular protocols they make use of. Lastly, it will discuss security considerations important to \ac{IoT} applications.
-After that, section \ref{sec:information-security} will provide insights into relevant concepts and the practices used and applied in information security. It covers key concepts and legal considerations, integration of information security in software development and common practices and methods involved.
+After that, section \ref{sec:information-security} will provide insights into relevant concepts and the practices used and applied in information security. It covers key concepts and legal considerations, integration of information security in software development and common practices and methods involved. %TODO: Update
 
 
 \section{Design Patterns}
 \subsection{Pipeline/Pipes and Filters Pattern}
-%CITE: 1996 Paper Design Patterns in Software Design Patterns
+In a paper from 1996, Alencar et al. describe the pipes and filters pattern as a mechanism to process streams of data \cite{alencar_cowan_lucena_1996}. They state that the pattern features \enquote{pipes} and \enquote{filters} components: pipes relay data streams between filters while the filters process the data streams' contents. Figure \ref{fig:dp-pipes-filters} shows an exemplaric sequence of $n$ pipes and filters relaying and processing an object $O$ by implementing pipes as method calls. Alencar et al. state that the pattern's \enquote{objective is to obtain highly reusable, interchangeable and maintainable applications}.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=12cm]{img/ch04/pipeline-behaviour.pdf}
-    \captionof{figure}{?} % TODO
+    \includegraphics[width=14cm]{img/ch03/pipeline-behaviour.pdf}
+    \captionof{figure}{?} % TODO: Describe
     \label{fig:dp-pipes-filters}
 \end{figure}
-\subsection{Abstract Factory Pattern}
+\subsection{Abstract Factory/Kit Pattern}
+Gamma et al. describe the intent of the abstract factory pattern as follows: "provide an interface for creating families of related or dependent objects without specifying their concrete classes" \cite{Gamma1998}. They propose the following components:
+\begin{itemize}
+    \item \enquote{AbstractProduct}: interface for products.
+    \item \enquote{AbstractFactory}: interface for creating objects that implement \enquote{AbstractProduct}.
+    \item \enquote{ConcreteProduct}: classes that implement \enquote{AbstractProduct}.
+    \item \enquote{ConcreteFactory}: classes that implements \enquote{AbstractFactory} and create \enquote{ConcreteProducs}. 
+\end{itemize}
+They conclude that there are multiple consequences to using the pattern, one being that it \enquote{isolates concrete classes}, meaning that there is a clear isolation from the Client and the ConcreteFactories.
+%CITE: 1996 Paper Design Patterns in Software Design Patterns
 %CITE: 1997 - Book - Design Patterns
 \subsection{Publish-Subscribe/Observer Pattern}
 %CITE: 1997 - Book - Design Patterns
-
+In their book \enquote{Design Patterns - Elements }, Gamma et al.
 \section{Computer Communication}
 \label{sec:computer-networks}
 \emph{TBD: OSI-Modell} %TODO
@@ -54,7 +63,10 @@ Building up on pre-existing network infrastructure and in order to meet requirem
 \label{sec:information-security}
 \subsection{The CIA Triad}
 
-\subsection{Penetration Testing}
+\subsection{Methodology}
+\subsubsection{Penetration Testing}
+\subsubsection{Red-Teaming}
+\subsubsection{Fuzzing}
 
 \subsection{Man-In-The-Middle Attacks}
 \ac{MITM}
