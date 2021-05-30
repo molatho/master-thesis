@@ -28,7 +28,7 @@ Communication with other systems is encapsulated into the \enquote{Message IO}-p
 \begin{figure}[h]
     \centering
     \includegraphics[width=12cm]{img/ch05/component-view-2-messageio.pdf}
-    \captionof{figure}{The \enquote{Message IO}-package}
+    \captionof{figure}{The \enquote{Message IO}-package. The white boxes indicate ports for communication with outside components.}
     \label{fig:component-view-2}
 \end{figure}
 It should be noted that the static view of the design is rather simple due to its dynamic runtime behaviour: many instances and relationships are only instantiated at runtime and not pre-determined. A schematic representation of the dynamic structure and interweaving of state-machines, network stacks and pipes (in this concept called a \enquote{\emph{pipeline}}) is shown in figure \ref{fig:pipeline}.
@@ -110,7 +110,7 @@ The design shown in section \ref{sec:design-1} was an iteration of the design wo
 \subsection{Overview}
 Another iteration of the design (shown in figure \ref{fig:component-view2-1}) was made to address these issues. While the \enquote{Message IO} and \enquote{Site} components are left unchanged, the global state-machine is replaced by the \enquote{Registry} and \enquote{PipelineRepository} components that allow for de-centralized and more controlled processing of messages.
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
     \includegraphics[width=10cm]{img/ch05/registry-remoteunit.pdf}
     \captionof{figure}{?} %TODO: Describe
@@ -144,7 +144,7 @@ The monolithic concept suggests a centralized and self-contained design that com
 In contrast to this, the distributed concept separates the high-level business logic (like routing messages) and low-level tasks as part of a client-server model: the high-level logic is implemented in the central proxy server while low-level tasks are isolated into separate remote services. These services can either be run on the same machine the proxy server runs on or on external machines. Through dynamic creation and registration of remote service instances, this concept also implements scalability. Since there is no restrictions to the programming languages, platforms or frameworks used by remote services, the concept also embraces platform compatibility.
 \paragraph{Complexity}
 The reliance on deeply nested data-structures has a high impact on the complexity of the monolithic concept at runtime. This makes debugging an implementation of this concept significantly harder and more time-consuming. However, adding new extensions to this concept becomes a comparatively easier task as integration of such new extensions only takes place on a source-code level.\\
-As opposed to this, the distributed approach simplifies the high-level tasks such as routing messages by introducing components that allow traceability and thus establish transparency. The offloading of protocol implementations into logical units that are accessed via \ac{IPC} however contribute to a more challenging deployment of the application. Also, due to their distributed nature, debugging these remote units can introduce further problems (e.g. connection losses and high latencies) and requires a more sophisticated and complex testing environment than the monolithic concept.
+As opposed to this, the distributed approach simplifies the high-level tasks such as routing messages by introducing distributed components that allow traceability and thus establish transparency. The offloading of protocol implementations into logical units that are accessed via \ac{IPC} however contribute to a more challenging deployment of the application. Also, due to their distributed nature, debugging these remote units can introduce further problems (e.g. connection losses and high latencies) and requires a more sophisticated and complex testing environment than the monolithic concept.
 
 \paragraph{Maturity}
 Some of the core components of the monolithic concept were already tested and proven by the first prototype. For instance, linked pipes proved to be an effective means to route and process messages up and down a processing pipeline. However, due to time-constraints, other core concepts such as the state-machines could not be tested. Regarding completeness, it is noteworthy that this concept's interfaces are well-defined.\\

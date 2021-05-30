@@ -185,15 +185,14 @@
   month     = {9}
 }
 
-@online{gupta_banks_2015,
-  title     = {MQTT Version 3.1.1 Plus Errata 01},
-  author    = {Gupta, Rahul and Banks, A},
-  year      = 2015,
-  month     = 11,
-  journal   = {MQTT Version 3.1.1},
+@online{gupta_banks_2019,
+  title     = {MQTT Version 5.0},
+  author    = {Rahul {Gupta} and Andrew {Banks} and Ed {Briggs} and Ken{Borgendale}},
+  year      = 2019,
+  month     = 3,
   publisher = {OASIS Standard},
-  url       = {http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html},
-  urldate   = {2021-05-20}
+  url       = {https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html},
+  urldate   = {2021-05-28}
 }
 
 
@@ -244,10 +243,37 @@
   urldate = {2021-05-22}
 }
 
+@misc{ptesguide,
+  title   = {PTES Technical Guidelines},
+  url     = {http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines},
+  urldate = {2021-05-29}
+}
+
+@misc{owaspptes,
+  title   = {OWASP Penetration Testing Execution Standard},
+  url     = {https://owasp.org/www-project-web-security-testing-guide/v41/3-The_OWASP_Testing_Framework/1-Penetration_Testing_Methodologies},
+  urldate = {2021-05-29}
+}
+
 @misc{burpsuite,
   title   = {PortSwigger - Burp Suite},
   url     = {https://portswigger.net/burp},
   urldate = {2021-05-22}
+}
+
+@article{HANSMAN200531,
+  title    = {A taxonomy of network and computer attacks},
+  journal  = {Computers \& Security},
+  volume   = {24},
+  number   = {1},
+  pages    = {31-43},
+  year     = {2005},
+  issn     = {0167-4048},
+  doi      = {https://doi.org/10.1016/j.cose.2004.06.011},
+  url      = {https://www.sciencedirect.com/science/article/pii/S0167404804001804},
+  author   = {Simon Hansman and Ray Hunt},
+  keywords = {Taxonomy, Computer attack, Network attack, Classification scheme, Attack vector, Attack target, CERT},
+  abstract = {Attacks over the years have become both increasingly numerous and sophisticated. This paper focuses on the provisioning of a method for the analysis and categorisation of both computer and network attacks, thus providing assistance in combating new attacks, improving computer and network security as well as providing consistency in language when describing attacks. Such a taxonomy is designed to be useful to information bodies such as CERTs (Computer Emergency Response Teams) who have to handle and categorise an every increasing number of attacks on a daily basis. Information bodies could use the taxonomy to communicate more effectively as the taxonomy would provide a common classification scheme. The proposed taxonomy consists of four dimensions which provide a holistic taxonomy in order to deal with inherent problems in the computer and network attack field. The first dimension covers the attack vector and the main behaviour of the attack. The second dimension allows for classification of the attack targets. Vulnerabilities are classified in the third dimension and payloads in the fourth. Finally, to demonstrate the usefulness of this taxonomy, a case study applies the taxonomy to a number of well known attacks.}
 }
 
 @misc{owaspzap,
@@ -272,6 +298,24 @@
   title   = {The Original HTTP as defined in 1991},
   url     = {https://www.w3.org/Protocols/HTTP/AsImplemented.html},
   urldate = {2021-05-22}
+}
+
+@misc{owaspmsvs,
+  title   = {OWASP Mobile Application Security Verification Standard},
+  url     = {https://github.com/OWASP/owasp-masvs},
+  urldate = {2021-05-28}
+}
+
+@misc{owaspasvs,
+  title   = {OWASP Application Security Verification Standard},
+  url     = {https://github.com/OWASP/ASVS},
+  urldate = {2021-05-28}
+}
+
+@misc{owaspisvs,
+  title   = {OWASP IoT Security Verification Standard},
+  url     = {https://github.com/OWASP/IoT-Security-Verification-Standard-ISVS},
+  urldate = {2021-05-28}
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}
@@ -354,6 +398,24 @@ and Holweg, Gerald},
   address     = {Geneva, CH},
   institution = {International Organization for Standardization, International Electrotechnical Commission}
 }
+@techreport{ISOIEC27000,
+  type        = {Standard},
+  key         = {ISO/IEC 27000 Fith Edition},
+  month       = Feb,
+  year        = {2018},
+  title       = {{Information technology — Security techniques — Information security management systems — Overview and vocabulary}},
+  volume      = {2018},
+  address     = {Geneva, CH},
+  institution = {International Organization for Standardization, International Electrotechnical Commission}
+}
+@article{Lundgren2019DefiningIS,
+  title   = {Defining Information Security},
+  author  = {B. Lundgren and Niklas M{\"o}ller},
+  journal = {Science and Engineering Ethics},
+  year    = {2019},
+  volume  = {25},
+  pages   = {419 - 441}
+}
 
 @misc{rfc1122,
   series       = {Request for Comments},
@@ -429,3 +491,42 @@ and Holweg, Gerald},
   abstract     = {This memo describes how to use Transport Layer Security (TLS) to secure Hypertext Transfer Protocol (HTTP) connections over the Internet. This memo provides information for the Internet community.},
   urldate      = {2021-05-22}
 }
+
+@misc{rfc6455,
+  series       = {Request for Comments},
+  number       = 6455,
+  howpublished = {RFC 6455},
+  publisher    = {RFC Editor},
+  doi          = {10.17487/RFC6455},
+  url          = {https://rfc-editor.org/rfc/rfc6455.txt},
+  author       = {Alexey Melnikov and Ian Fette},
+  title        = {{The WebSocket Protocol}},
+  pagetotal    = 71,
+  year         = 2011,
+  month        = dec,
+  abstract     = {The WebSocket Protocol enables two-way communication between a client running untrusted code in a controlled environment to a remote host that has opted-in to communications from that code. The security model used for this is the origin-based security model commonly used by web browsers. The protocol consists of an opening handshake followed by basic message framing, layered over TCP. The goal of this technology is to provide a mechanism for browser-based applications that need two-way communication with servers that does not rely on opening multiple HTTP connections (e.g., using XMLHttpRequest or \textless{}iframe\textgreater{}s and long polling). {[}STANDARDS-TRACK{]}}
+}
+
+@misc{rfc7692,
+  series       = {Request for Comments},
+  number       = 7692,
+  howpublished = {RFC 7692},
+  publisher    = {RFC Editor},
+  doi          = {10.17487/RFC7692},
+  url          = {https://rfc-editor.org/rfc/rfc7692.txt},
+  author       = {Takeshi Yoshino},
+  title        = {{Compression Extensions for WebSocket}},
+  pagetotal    = 28,
+  year         = 2015,
+  month        = dec,
+  abstract     = {This document defines a framework for creating WebSocket extensions that add compression functionality to the WebSocket Protocol. An extension based on this framework compresses the payload data portion of WebSocket data messages on a per-message basis using parameters negotiated during the opening handshake. This framework provides a general method for applying a compression algorithm to the contents of WebSocket messages. Each compression algorithm has to be defined in a document defining the extension by specifying the parameter negotiation and the payload transformation algorithm in detail. This document also specifies one specific compression extension using the DEFLATE algorithm.}
+}
+
+ @misc{braden_2002,
+  title     = {Penetration Testing - Is it right for you?},
+  url       = {https://www.sans.org/reading-room/whitepapers/testing/penetration-testing-you-265},
+  journal   = {Information Security Reading Room},
+  publisher = {SANS Institute},
+  author    = {Braden, Jimmy},
+  year      = {2002}
+} 

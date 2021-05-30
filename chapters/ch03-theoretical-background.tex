@@ -84,7 +84,7 @@ In their paper, Perera et al. categorized \ac{IoT} applications into several cla
 \subsection{Common Protocols}
 \label{sec:iot-common-protocols}
 Building up on pre-existing network infrastructure and in order to meet requirements specific to individual fields of use and use-case scenarios, the landscape of \ac{IoT} attends with a great variety of \emph{communication protocols} (further used to refer to both transport and application protocols). This section will provide a brief overview of the working principles, use cases and history of some protocols commonly used in \ac{IoT} and \ac{IIoT} applications today.
-\paragraph{\ac{HTTP}}
+\subsubsection{Hypertext Transfer Protocol (\ac{HTTP})}
 Initially conceived by Berners-Lee et al. at the \ac{CERN} in 1991, the \ac{HTTP} protocol is an application layer protocol that defines \emph{requests} to resources made by clients and \emph{responses} to said requests replied by servers \cite{http1991}. According to RFC1945, \ac{HTTP} requests consist of \cite{rfc1945}:
 \begin{itemize}
     \item A request line including the \ac{HTTP} verb (e.g. $GET$ or $POST$), the requested resource and the \ac{HTTP} version used (e.g. $HTTP/1.0$). The verb can be used to indicates what kind action is requested (i.e. a $GET$ request should retrieve contents while a $POST$ request could be used to create new content). The request line is terminated by a set of \ac{CR} \ac{LF} characters.
@@ -108,23 +108,43 @@ Figure \ref{fig:curl-http-request-respose} shows a \ac{HTTP} requests to the sit
     \label{fig:curl-http-request-respose}
 \end{figure}
 
-%CITE: 1.0 https://datatracker.ietf.org/doc/html/rfc1945
-%CITE: 2019 - Book - SmartInnovationsInCommunicatio - p174
-\paragraph{\ac{WS}} \emph{TBD}
+\subsubsection{\ac{WS}}
+The WebSocket protocol is a bidirectional application protocol used on top of \ac{TCP} connections proposed in RFC6455 \cite{rfc6455}. As stated in the RFC, it was designed to enable web applications to communicate via a bidirectional channel. In order to reuse existing infrastructure, \ac{WS} was designed to upgrade existing \ac{TCP} connections for \ac{HTTP} and replace the text-based \ac{HTTP} communication with a binary frame-based protocol. The \ac{WS} protocol defines header fields for various purposes. One of those fields is the $reserved bits$ field that was intended to be used with extensions to the protocol. One such extension is the \ac{PMCE} that implements compression for frames \cite{rfc7692}.
 
-%CITE: https://datatracker.ietf.org/doc/html/rfc6455
-%CITE: PMCE https://tools.ietf.org/html/rfc7692
-\paragraph{\ac{MQTT}}
-\cite{gupta_banks_2015}
+\subsubsection{Message Queuing Telemetry Transport (\ac{MQTT})}
+Proposed as an \ac{OASIS} standard, \ac{MQTT} is described as a protocol that requires a client/server architecture and employs the publish/subscribe pattern for message queueing and routing \cite{gupta_banks_2019}. \ac{MQTT} clients can publish and subscribe to \emph{topics}\footnote{Topics are arbitrary strings. \ac{MQTT} defines special characters that can be used as wildcards.}. \ac{MQTT} servers (called \enquote{brokers}) do not transform messages or process them in any meaningful way but only implement routing and broadcasting functionalities. Thus, contrary to other client/server based protocols, the central unit is not intended to process the transmitted messages. Similarly to \ac{HTTP}, \ac{MQTT} by itself does not implement security features and connection credential are sent in plain text. To improve on this, \ac{SSL} can be used as an underlying transport protocol to encrypt \ac{MQTT} messages.
 
-\paragraph{Industrial} Modbus \ac{TCP}, Profibus/Profinet, \ac{OPC U/A}
+\subsubsection{Industrial Protocols}
+In industrial automation environments, other additional protocols are used. These include protocols that were initially conceived as serial protocols that communicated via bus topologies (e.g. Modbus and Profibus) and were over time upgraded to be operated in \ac{IP}-based networks (e.g. Modbus \ac{TCP} and Profinet) as well as modern protocols that employ security features (such as \ac{OPC U/A}). As these protocols are of little relevance to this thesis, they are not discussed in further detail.
 
 \section{Information Security}
 \label{sec:information-security}
+The following sections discuss properties, methodologies and tools used in information security.
+
 \subsection{The CIA Triad}
+In information security, there are three properties to information systems defined in \ac{ISO}/\ac{IEC} 27000:
+\begin{itemize}
+    \item Confidentiality: \enquote{Property that information is not made available or disclosed to unauthorized individuals, entities, or processes}. \cite{ISOIEC27000}
+    \item Integrity: \enquote{Property of accuracy and completeness}. \cite{ISOIEC27000}
+    \item Availability: \enquote{Property of being accessible and usable on demand by an authorized entity}. \cite{ISOIEC27000}
+\end{itemize}
+These properties are commonly referred to as the \enquote{CIA triad} of \enquote{CIA definitions}. However, there are shortcomings to these definitions that are discussed in literature: for instance, by presenting a set of examples, Lundgren et al. point out that the CIA definitions are not suitable to appropriately cover all security requirements \cite{Lundgren2019DefiningIS}.
 
 \subsection{Methodology}
 \subsubsection{Penetration Testing}
+The SANS Institute defines penetration testing as \enquote{the authorized, scheduled and systematic process of using known vulnerabilities in an attempt to perform an intrusion into host, network or application resources} \cite{braden_2002}.\\
+There are various guidelines for penetration tests targetting different types of applications: The \ac{OWASP} \ac{ASVS}, \ac{MSVS} and \ac{ISVS} propose open standards for conducting web application, mobile application and \ac{IoT} penetration tests, respectively \cite{owaspasvs}\cite{owaspmsvs}\cite{owaspisvs}.\\
+The \ac{OWASP} \ac{PTES} divides the penetration testing process into seven phases \cite{owaspptes}:
+\begin{enumerate}
+    \item Pre-engagement Interactions: Preparation of the penetration test and definition of the scope of the test (e.g. networks and duration).
+    \item Intelligence Gathering: Collecting information about the target systems (e.g. making use of \ac{OSINT} methods and tools) to reduce the risk of being detected by security systems.
+    \item Threat Modelling: Inferring potential systems in place, risks associated with the operation of those and possible mitigations thereof that may indicate potential attack vectors\footnote{\enquote{The attack vector is the way in which an attack reaches its target.}\cite{HANSMAN200531}}.
+    \item Vulnerability Analysis:
+    \item Exploitation:
+    \item Post Exploitation:
+    \item Reporting:
+\end{enumerate}
+
 \subsubsection{Red-Teaming}
 \subsubsection{Fuzzing}
 
