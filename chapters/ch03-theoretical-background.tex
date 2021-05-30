@@ -67,22 +67,47 @@ This concept of a stack of network layers results in a series of encapsulated me
     \item Data Link: Multiple Ethernet frames with a binary payload and header information about the source and destination peer's \ac{MAC} addresses.
     \item \textit{(Physical: Stream of individual bits that make up the Ethernet frames.)}
 \end{etaremune}
-may be split into multiple TCP packets (with \ac{TCP} specific header information such as source and destination ports), which are encapsulated in an \ac{IP} packet ()
 
 
-\section{(Industrial) Internet of Things}
+\section{Internet of Things}
 \label{sec:internet-of-things}
 \subsection{Fields of Use}
-%TBD: KRITIS
-%CITE: 2013 - Book - BSI
-%Smart Home?
-\subsection{Application Architectures}
-\emph{TBD: Cloud + Device}
+In their paper, Perera et al. categorized \ac{IoT} applications into several classes \cite{IOTSurvey}:
+\begin{itemize}
+    \item[A]{Smart Wearable: smart products that can be worn on different body parts or clothing.}
+    \item[B]{Smart Home: connected applications installed and/or used in home environments.}
+    \item[C]{Smart City: connected applications for large-scale use in cities that support logistic challenges such as traffic control and resource management.}
+    \item[D]{Smart Environment: applications that provide monitoring capabilities for environmental metrics such as air quality and water quality.}
+    \item[E]{Smart Enterprise: applications used in commercial and industrial environments to address challenging tasks such as logistics, transportation and energy management.}
+\end{itemize}
+
 \subsection{Common Protocols}
 \label{sec:iot-common-protocols}
 Building up on pre-existing network infrastructure and in order to meet requirements specific to individual fields of use and use-case scenarios, the landscape of \ac{IoT} attends with a great variety of \emph{communication protocols} (further used to refer to both transport and application protocols). This section will provide a brief overview of the working principles, use cases and history of some protocols commonly used in \ac{IoT} and \ac{IIoT} applications today.
-\paragraph{\ac{HTTP}} \emph{TBD} %TODO
-\ac{HTTPS}
+\paragraph{\ac{HTTP}}
+Initially conceived by Berners-Lee et al. at the \ac{CERN} in 1991, the \ac{HTTP} protocol is an application layer protocol that defines \emph{requests} to resources made by clients and \emph{responses} to said requests replied by servers \cite{http1991}. According to RFC1945, \ac{HTTP} requests consist of \cite{rfc1945}:
+\begin{itemize}
+    \item A request line including the \ac{HTTP} verb (e.g. $GET$ or $POST$), the requested resource and the \ac{HTTP} version used (e.g. $HTTP/1.0$). The verb can be used to indicates what kind action is requested (i.e. a $GET$ request should retrieve contents while a $POST$ request could be used to create new content). The request line is terminated by a set of \ac{CR} \ac{LF} characters.
+    \item A set of request header fields delimited by a set of \ac{CR} \ac{LF} characters where headers are encoded in the format $Key: Value$.
+    \item An empty line indicates the end of the header fields.
+    \item Optionally, requests can contain a message body. Its encoding is dependent on value of the $Content-Type$ header. If present, the length of the message body is specified in the $Content-Length$ header.
+\end{itemize}
+The structure of \ac{HTTP} responses is similar to \ac{HTTP} requests \cite{rfc1945}:
+\begin{itemize}
+    \item A status line including the \ac{HTTP} version and status code (e.g. $200$ meaning \enquote{OK}, indicating a successful response). The status line is terminated by a set of \ac{CR} \ac{LF} characters.
+    \item A set of response header fields, encoded just like the above-said request headers.
+    \item An empty line.
+    \item Optional message body. Like request message bodies, the encoding of the message body depends on the value of the $Content-Type$ header.
+\end{itemize}
+Figure \ref{fig:curl-http-request-respose} shows a \ac{HTTP} requests to the site \enquote{httpbin.org}. By definition, \ac{HTTP} sends data in clear-text. Thus, \ac{HTTP} communication can be intercepted and manipulated by malicious actors. \ac{HTTPS} was introduced to solve this issue by sending \ac{HTTP} requests and responses through \ac{SSL} encrypted connections \cite{rfc2818}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=12cm]{img/ch03/http-request-response.png}
+    \captionof{figure}{A truncated \ac{HTTP} request (indicated by \enquote{>}) to \enquote{httpbin.org} using the utility \enquote{curl} and the truncated response received from the remote server (indicated by \enquote{<}).} %TODO: Describe
+    \label{fig:curl-http-request-respose}
+\end{figure}
+
 %CITE: 1.0 https://datatracker.ietf.org/doc/html/rfc1945
 %CITE: 2019 - Book - SmartInnovationsInCommunicatio - p174
 \paragraph{\ac{WS}} \emph{TBD}
