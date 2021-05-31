@@ -1,9 +1,9 @@
 \chapter{Theoretical Background}
 \label{chap:theoretical-background}
 This chapter provides an overview of the technologies and concepts referred to in subsequent chapters.
-Starting with section \ref{sec:computer-networks}, essential concepts of computer communication in networks will be presented and examined, covering the concept of network layers, intercepting of communication between two parties and analysis of transferred data.
-Building upon these fundamentals, section \ref{sec:internet-of-things} introduces the fields of use of \ac{IoT} applications, common architectures used today to implement them and popular protocols they make use of. Lastly, it will discuss security considerations important to \ac{IoT} applications.
-After that, section \ref{sec:information-security} will provide insights into relevant concepts and the practices used and applied in information security. It covers key concepts and legal considerations, integration of information security in software development and common practices and methods involved. %TODO: Update
+Starting with section \ref{sec:computer-networks}, essential concepts of computer communication in networks will be presented and examined, detailing the concept of network layers.
+Building upon these fundamentals, section \ref{sec:internet-of-things} introduces the fields of use of \ac{IoT} applications popular protocols they make use of.
+After that, section \ref{sec:information-security} will provide insights into relevant concepts and the practices used and applied in information security. It information security properties, methodology and tools used in information security.
 
 
 \section{Design Patterns}
@@ -14,7 +14,7 @@ In a paper from 1996, Alencar et al. describe the pipes and filters pattern as a
 \begin{figure}[h!]
     \centering
     \includegraphics[width=14cm]{img/ch03/pipeline-behaviour.pdf}
-    \captionof{figure}{?} % TODO: Describe
+    \captionof{figure}{An abstract sequence diagram of the pipes and filters design pattern. The relaying mechanism used by pipes in this diagram is realized through method calls.}
     \label{fig:dp-pipes-filters}
 \end{figure}
 \subsection{Abstract Factory/Kit Pattern}
@@ -99,12 +99,12 @@ The structure of \ac{HTTP} responses is similar to \ac{HTTP} requests \cite{rfc1
     \item An empty line.
     \item Optional message body. Like request message bodies, the encoding of the message body depends on the value of the $Content-Type$ header.
 \end{itemize}
-Figure \ref{fig:curl-http-request-respose} shows a \ac{HTTP} requests to the site \enquote{httpbin.org}. By definition, \ac{HTTP} sends data in clear-text. Thus, \ac{HTTP} communication can be intercepted and manipulated by malicious actors. \ac{HTTPS} was introduced to solve this issue by sending \ac{HTTP} requests and responses through \ac{SSL} encrypted connections \cite{rfc2818}.
+Figure \ref{fig:curl-http-request-respose} shows a \ac{HTTP} requests to the site \enquote{httpbin.org}. By definition, \ac{HTTP} sends data in clear-text. Thus, \ac{HTTP} communication can be intercepted and manipulated by malicious actors. \ac{HTTPS} was introduced to solve this issue by sending \ac{HTTP} requests and responses through \ac{TLS} encrypted connections \cite{rfc2818}.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=12cm]{img/ch03/http-request-response.png}
-    \captionof{figure}{A truncated \ac{HTTP} request (indicated by \enquote{>}) to \enquote{httpbin.org} using the utility \enquote{curl} and the truncated response received from the remote server (indicated by \enquote{<}).} %TODO: Describe
+    \captionof{figure}{A truncated \ac{HTTP} request (indicated by \enquote{>}) to \enquote{httpbin.org} using the utility \enquote{curl} and the truncated response received from the remote server (indicated by \enquote{<}).}
     \label{fig:curl-http-request-respose}
 \end{figure}
 
@@ -112,7 +112,7 @@ Figure \ref{fig:curl-http-request-respose} shows a \ac{HTTP} requests to the sit
 The WebSocket protocol is a bidirectional application protocol used on top of \ac{TCP} connections proposed in RFC6455 \cite{rfc6455}. As stated in the RFC, it was designed to enable web applications to communicate via a bidirectional channel. In order to reuse existing infrastructure, \ac{WS} was designed to upgrade existing \ac{TCP} connections for \ac{HTTP} and replace the text-based \ac{HTTP} communication with a binary frame-based protocol. The \ac{WS} protocol defines header fields for various purposes. One of those fields is the $reserved bits$ field that was intended to be used with extensions to the protocol. One such extension is the \ac{PMCE} that implements compression for frames \cite{rfc7692}.
 
 \subsubsection{Message Queuing Telemetry Transport (\ac{MQTT})}
-Proposed as an \ac{OASIS} standard, \ac{MQTT} is described as a protocol that requires a client/server architecture and employs the publish/subscribe pattern for message queueing and routing \cite{gupta_banks_2019}. \ac{MQTT} clients can publish and subscribe to \emph{topics}\footnote{Topics are arbitrary strings. \ac{MQTT} defines special characters that can be used as wildcards.}. \ac{MQTT} servers (called \enquote{brokers}) do not transform messages or process them in any meaningful way but only implement routing and broadcasting functionalities. Thus, contrary to other client/server based protocols, the central unit is not intended to process the transmitted messages. Similarly to \ac{HTTP}, \ac{MQTT} by itself does not implement security features and connection credential are sent in plain text. To improve on this, \ac{SSL} can be used as an underlying transport protocol to encrypt \ac{MQTT} messages.
+Proposed as an \ac{OASIS} standard, \ac{MQTT} is described as a protocol that requires a client/server architecture and employs the publish/subscribe pattern for message queueing and routing \cite{gupta_banks_2019}. \ac{MQTT} clients can publish and subscribe to \emph{topics}\footnote{Topics are arbitrary strings. \ac{MQTT} defines special characters that can be used as wildcards.}. \ac{MQTT} servers (called \enquote{brokers}) do not transform messages or process them in any meaningful way but only implement routing and broadcasting functionalities. Thus, contrary to other client/server based protocols, the central unit is not intended to process the transmitted messages. Similarly to \ac{HTTP}, \ac{MQTT} by itself does not implement security features and connection credential are sent in plain text. To improve on this, \ac{TLS} can be used as an underlying transport protocol to encrypt \ac{MQTT} messages.
 
 \subsubsection{Industrial Protocols}
 In industrial automation environments, other additional protocols are used. These include protocols that were initially conceived as serial protocols that communicated via bus topologies (e.g. Modbus and Profibus) and were over time upgraded to be operated in \ac{IP}-based networks (e.g. Modbus \ac{TCP} and Profinet) as well as modern protocols that employ security features (such as \ac{OPC U/A}). As these protocols are of little relevance to this thesis, they are not discussed in further detail.
@@ -179,12 +179,15 @@ The following tools are \ac{MITM} that support specific protocols only:
     \label{fig:burpsuite}
 \end{figure}
 \paragraph{mitmproxy} %focused on HTTP/S + WS but supports extension, largely undocumented source
-\paragraph{mProxy}
-\paragraph{IOXY}
+\enquote A multi-purpose \ac{MITM} tool that implements (de-) serialization of \ac{TCP} packets, \ac{TLS}, \ac{HTTP}, and \ac{WS} communication \cite{mitmproxy}. It is written in Python and features a web-interface and a Python \ac{API} for extending mitmproxy.
+
+\paragraph{mProxy} A \ac{MQTT} proxy written in Go that by itself does not feature any interactive interfaces for penetration testers and lacks support for \ac{MQTT} over \ac{TLS} \cite{mproxy}. It is, however, scriptable and enables penetration testers to execute scripts on individual \ac{MQTT} messages.
+
+\paragraph{IOXY} Similarly to mProxy, \enquote{IOXY} is a \ac{MQTT} proxy written in Go. It improves on mProxy's shortcomings and implements a web interface and supports \ac{MQTT} over \ac{TLS} \cite{ioxy}.
 %Generic
-\subsubsection{Generic \acp{MITM}}
-The following tools are generic \acp{MITM} that support a wide range of network protocols:
+\subsubsection{Generic \acp{MITM} Tools}
+The following tools are generic \ac{MITM} tools that support a wide range of network protocols:
 \paragraph{ettercap} While \emph{ettercap} was initially developed as a network sniffer for switched \ac{LAN}, it was gradually extended to implement a set of \ac{MITM} attacks such as \ac{ARP} spoofing and \emph{packet filtering} which allowed modifying intercepted communication \cite{ettercap}. Penetration testers can write custom filters in a scripting language to implement their own packet filtering logic. It is written in C and implements network protocols of layers 1 to 4 of the \ac{OSI} model. Thus, it does not implement application protocols.
 \paragraph{bettercap} Similar to ettercap, \emph{bettercap} implements network sniffing and other features used for network analysis and discovery. However, contrary to ettercap, it aims to support a wider range of transport technologies and is described by its authors as \enquote{\emph{the Swiss Army knife for WiFi, Bluetooth Low Energy, wireless HID hijacking and IPv4 and IPv6 network reconnaissance and MITM attacks}} \cite{bettercap}. It is written in Go and features a web-interface for configuration, control and monitoring.
-\paragraph{Scapy}
-\paragraph{MITMf} %Built on scapy, implements some attacks and servers, not maintained anymore, superseded by bettercap 
+\paragraph{Scapy} Its authors describe \enquote{scapy} as a \enquote{a powerful interactive packet manipulation program} \cite{scapy}. It is written in Python and can be used to craft and parse packets of various protocols.
+\paragraph{MITMf} Built on top of scapy, \enquote{MITMf} implements a set of attacks against network devices \cite{mitmf}. However, it is no longer updated and its authors suggest using bettercap instead.

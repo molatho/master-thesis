@@ -1,34 +1,34 @@
 % 2. Verwandte Arbeiten
 \chapter{Related Work}
 \label{chap:related-work}
-This chapter will discuss related and previous work on topics in this thesis' context. This includes network analysis in general (and \ac{IoT} in particular), homogenization and unification of various \ac{IoT} related technologies and performance of security evaluations of these technologies.
+%This chapter will discuss related and previous work on topics in this thesis' context. This includes network analysis in general (and \ac{IoT} in particular), homogenization and unification of various \ac{IoT} related technologies and performance of security evaluations of these technologies.
 
-\section{Computer Network Analysis in General}
-\label{sec:computer-network-analysis}
-\emph{TBD: Polymorph \cite{ramos_2018}}
+%\section{Computer Network Analysis in General}
+%\label{sec:computer-network-analysis}
+%\emph{TBD: Polymorph \cite{ramos_2018}}
 
-\section{Homogenization of the IoT Landscape}
-\label{sec:homogenization}
-\emph{TBD: IoT proxy for homogenization \cite{wenquan2018proxy}} %TODO
+%\section{Homogenization of the IoT Landscape}
+%\label{sec:homogenization}
+%\emph{TBD: IoT proxy for homogenization \cite{wenquan2018proxy}}
 
-\section{IoT Security Analysis}
-\label{sec:security-analysis}
+%\section{IoT Security Analysis}
+%\label{sec:security-analysis}
 
 As part of their master's thesis, Bellemans conducted a study in 2020 that evaluated the security and privacy implementations of fifteen \enquote{\emph{smart}} devices from a wide price range available on the market at the time. They performed automated analyses and requested data access from manufacturers \cite{JonahBellemans}. The thesis showed that the devices made use of a variety of both standardized and proprietary transport and application protocols. It also found severe flaws in the devices' compliance to \ac{GDPR}: about one third of the devices' manufacturers did not reply to \ac{GDPR} requests at all, however Bellemans noted that the COVID-19 pandemic may have had an impact on their data access requests. The thesis suggests that the introduction of a quality label that guarantees appropriate implementation of security and privacy aspects could prove beneficial for customers. \par
-In 2017, Apthorpe et al. presented a three stage strategy to examine metadata of network traffic of four smart devices \cite{apthorpe2017smart}. %TODO: Skizze
+In 2017, Apthorpe et al. presented a three stage strategy to examine metadata of network traffic of four smart devices \cite{apthorpe2017smart}.
 By monitoring the devices' traffic, they showed that even though the communication between the devices and their corresponding internet servers were encrypted, passive observers could deduce information about users' behaviour by identification of the destination server and analysis of the rate of traffic being sent. A noteworthy aspect of their work is that they performed this analysis from an \ac{ISP}'s point of view, exclusively examining metadata of the communication that took place. The strategy described in the paper consists of the following (greatly simplified) steps:
 \begin{enumerate}
     \item Identifying communication streams of individual devices (e.g. by examining the TCP packets' destination IPs).
     \item Associating the streams with specific device models (e.g. by performing reverse-look ups of the aforementioned IPs).
     \item Analysing traffic rates (presuming that traffic is generated upon taking measures).
 \end{enumerate}
-\emph{TBD: Add simple process diagram} %TODO
+\emph{TBD: Add simple process diagram}
 
 %1) identifying communication streams of individual devices (e.g. by examining the TCP packets' destination IPs)
 %2) associating the streams with specific device models (e.g. by performing reverse-look ups of the aforementioned IPs) and
 %3) analysing traffic rates (presuming that traffic is generated upon taking measures).
 
 Apthorpe et al. conclude that their strategy works well on inferring behaviour from regular internet traffic of smart devices, however they suppose that shaping traffic or making use of proxies (that effectively mask the destination IPs) could be effective counter-measures. It is safe to assume that regular smart home setups do not make use of proxies or traffic shaping though, thus being vulnerable to this kind of attack. \par
-\emph{TBD: NVISO Labs: Théo Rigas, IOXY \cite{rigas_ioxy}} %TODO
+%\emph{TBD: NVISO Labs: Théo Rigas, IOXY \cite{rigas_ioxy}}
 
 %CITE: https://ieeexplore.ieee.org/abstract/document/7442758

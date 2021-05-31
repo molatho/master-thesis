@@ -8,5 +8,6 @@
         "markdown",
         "latex",
         "plaintext"
-    ]
+    ],
+    "todo-tree.tree.scanMode": "workspace"
 }

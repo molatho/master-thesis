@@ -77,7 +77,7 @@ States hold a \enquote{NetStack} which in turn encapsulate a series of connected
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{img/ch05/classes-2-pipes.pdf}
-    \captionof{figure}{?} %TODO: Describe
+    \captionof{figure}{The interfaces, classes and enums used to represent pipes, their specializations and associated classes. This iteration separates BasePipes from IEncoders and IProcessors so BasePipes only implement routing of messages.}
     \label{fig:classes-2-pipes}
 \end{figure}
 
@@ -94,7 +94,7 @@ While there are many opportunities for specific implementations of the IProcesso
     \includegraphics[width=14cm]{img/ch05/classes-4-messages.pdf}
     \captionof{figure}{?} %TODO: Describe
     \label{fig:classes-4-messages}
-\end{figure} %TODO: Appendix!
+\end{figure}
 \subsection{Messages}
 Compared to the first prototype's design, the data-structures that represent messages are mostly unchanged (as shown in figure \ref{fig:classes-4-messages}). However, during implementation and testing of the first prototype it became apparent that in some cases \enquote{historical} information about messages was required. This iteration of the design adds a list of \enquote{ProtocolData} instances to messages that specify information about the protocol, message headers and the payload (\enquote{ISource}). IProcessors and IEncoders append newly transformed or (de-)serialized ProtocolData instances to messages. So over time, a message contains records of all those operations performed on it. This information can be useful in a number of cases like serialization: when a message is deserialized (e.g. the payload of a \ac{WS} message is extracted) on its way down a pipeline, important information about the formerly encapsulating protocol is lost (such as the \ac{WS} frame's flags). When a message is serialized on its way back up a pipeline, an IEncoder would have to generate this information or try and deduce it from the message, which is not always possible. However, since it can access the messages' history and former ProtocolData, it can read the original information and use this for serialization.
 
