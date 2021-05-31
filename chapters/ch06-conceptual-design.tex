@@ -1,10 +1,5 @@
-% 4. Konzept (Kontext, Ablauf, Anforderungen [Interviews], Konzept [Architektur])
 \chapter{Conceptual Design}
 \label{chap:conceptual-design}
-%This chapter will detail the process of conceptualizing the design of the modular proxy application based on the results of the preceding chapter. First, the requirements are analysed for their potential design implications in section \ref{sec:req-design-implications}. Afterwards the user interactions and domain entities identified in chapter \ref{chap:understanding-the-problem-space} are examined and broken down into communication flows between actors and systems in section \ref{sec:user-interactions-designing-workflow} and individual software components that complete the design are discussed in section \ref{sec:inferring-software-components}. Lastly, an overview of the complete design concept is given in section \ref{sec:abstract-design-concept}, discussing potential advantages and constraints. %TODO: Rewrite & update
-
-%\section{Inferring Software Components}
-%\label{sec:inferring-software-components}
 Building on the software design of the first prototype presented in section \ref{sec:prototype-design} and the insights gained in section \ref{sec:prototype-insights}, two design concepts were worked out. The following sections will detail components and principles of both concepts.
 
 \section{Design \#1: Monolithic Proxy Application}
@@ -21,7 +16,7 @@ As discussed in the previous chapter, the requirement \enquote{F2 Network Stacks
 \begin{figure}[H]
     \centering
     \includegraphics[width=12cm]{img/ch05/site-factory.pdf}
-    \captionof{figure}{?} %TODO: Describe
+    \captionof{figure}{A simple variation of the abstract factory pattern. Contrary to the design of the first prototype in section \ref{sec:prototype-design}, this variation does not specify the abstract type of the products that are built as return types but as part of the meta data used for object creation.}
     \label{fig:site-factory}
 \end{figure}
 Communication with other systems is encapsulated into the \enquote{Message IO}-package shown in figure \ref{fig:component-view-2}. Applications that are tested by penetration testers are connected to sockets provided by the \enquote{Gateway} component and temporarily stored in a message queue to be processed by the network stacks organized by the \enquote{Global Statemachine}. Similar to the \enquote{Server} interface used in the first prototype, gateways provide means of communicating with external systems and receiving and sending messages. They are highly abstract and meant to be used for implementing interfaces for any kind of communication protocols and technologies, such as \ac{IP}-based \ac{TCP} and \ac{UDP} communication but also other protocols such as USB, Bluetooth, ZigBee or KNX.
@@ -35,7 +30,7 @@ It should be noted that the static view of the design is rather simple due to it
 \begin{figure}[h]
     \centering
     \includegraphics[height=12cm]{img/ch05/pipeline.pdf}
-    \captionof{figure}{?} %TODO: Describe
+    \captionof{figure}{An abstract representation of the runtime hierarchy of nested \acp{FSM} and network stacks. The active states of the \acp{FSM} determine which network stacks are used, resulting in a chain of \acp{FSM} and network stacks, referred to as a \enquote{pipeline}.}
     \label{fig:pipeline}
 \end{figure}This figure highlights a series of active state-machines and network stacks which together constitute the active pipeline. \\
 \begin{figure}[h!]
@@ -128,7 +123,7 @@ Also, to transmit data between the proxy application and its remote units, this 
 
 \subsection{PipelineRepository} The PipelineRepository component holds information about all configured pipelines (that is a flattened representation of the hierarchically configured state-machines and network stacks) and their contexts. This allows to remove the pipes from the software architecture, providing better traceability of messages throughout the system and makes debugging the high-level application logic more accessible. Also, organizing network stacks and state-machines in one central place encourages creation of means to interface with these mechanisms such as \ac{REST}-\acp{API} that let penetration testers inspect the message queue and ongoing processes.
 
-\subsection{State of the Design Concept} This design concept promises to solve severe issues of the previous design iteration shown in section \ref{sec:design-1} and already defines some very high-level components. However, due to time constraints some components' designs were not  finished and require further work on specifics. For this, certain questions need to be answered and translated into the design:
+\subsection{State of the Design Concept}\label{sec:design-2-state} This design concept promises to solve severe issues of the previous design iteration shown in section \ref{sec:design-1} and already defines some very high-level components. However, due to time constraints some components' designs were not  finished and require further work on specifics. For this, certain questions need to be answered and translated into the design:
 \begin{itemize}
     \item \textbf{PipelineRepository:} How exactly is the hierarchy of state-machines and network stacks flattened? How is this flattened hierarchy represented in data-structures? How are instances of individual state-machines and network stacks initialized and organized for individual gateway-connections?
     \item \textbf{ISession:} How is information relevant to IEncoder and IProcessor instances (such as ScriptProcessors' Script instances) passed to remote units?

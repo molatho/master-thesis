@@ -105,6 +105,7 @@ This scenario involves only \ac{MQTT} as a transport protocol but, as can be see
 \end{itemize}
 
 \subsection{Requirements}
+\label{sec:prototype-requirements}
 To be able to operate in all of the aforementioned scenarios, the prototype had to implement a set of functional requirements:
 
 %F1
@@ -386,29 +387,34 @@ These insights were translated into the following, new non-functional requiremen
 
 \section{Analysis of Existing Software}
 \label{sec:analysis-existing-software}
-\emph{TBD: Explain why the tools shown in 3 are not up for the task}
+Existing software was examined and compared to see whether they could be modified and extended to fulfil the requirements worked out in sections \ref{sec:prototype-requirements} and \ref{sec:interviews}. Table \ref{table:comparison-existing-software} shows a comparison of popular software used for \ac{MITM} attacks in information security. As can be seen, some tools meet exclusion criteria such as being incapable of crafting packets (e.g. Wireshark) or not being released under an \ac{OSS} license (e.g. BurpSuite). Protocol specific tools such as mitmproxy, mProxy and IOXY usually do not consider support for further protocols in their software design which makes implementing new protocols to these tools a very challenging tasks. MITMf was not updated in years and lacks a clear documentation. The remaining tools (Scapy, Ettercap and bettercap) provide generic interfaces for parsing and crafting packets and executing scripts on packets. However, none of these feature \acp{FSM} for dynamically changing the network stack used for disassembling packets.\\
+For these reasons, a decision was made to implement a new tool instead of extending an existing one.
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{r|c|c|c|c|c|c}
+    \begin{tabular}{r|c|c|c|c|c|c|c}
         \toprule
-        \thead{$Name$} & \thead{$Latest$                                                                                                    \\$Release$} & \thead{$Implemented$\\$in$} & \thead{$Supported$\\$Protocols$} & \thead{$R$} & \thead{$W$} & \thead{$D$}\\
+        \thead{$Name$} & \thead{$Latest$                                                                                                    \\$Release$} & \thead{$Implemented$\\$in$} & \thead{$Supported$\\$Protocols$} & \thead{$R$} & \thead{$W$} & \thead{$D$} & \thead{$OSS$}\\
         \midrule
-        Wireshark      & 2020-07-01        & C      & Various    & \cellcolor{green!25}F  & \cellcolor{red!25}N    & \cellcolor{red!25}N    \\
+        Wireshark      & 2021-04-21        & C      & Various    & \cellcolor{green!25}F  & \cellcolor{red!25}N    & \cellcolor{red!25}N    & \cellcolor{green!25}Y\\
         \midrule
-        MITMf          & 2015-08-28        & Python & Various    & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}F  \\ %https://github.com/byt3bl33d3r/MITMf
+        BurpSuite      & 2021-05-26        & Java      & \ac{HTTPS}, \ac{WS}    & \cellcolor{green!25}F  & \cellcolor{green!25}F    & \cellcolor{green!25}F    & \cellcolor{red!25}N\\
         \midrule
-        Ettercap       & 2019-07-01        & C      & Various    & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}F  \\
+        Scapy          & 2021-04-19        & Python & Various    & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}Y\\ %https://github.com/byt3bl33d3r/MITMf
         \midrule
-        bettercap      & 2020-03-13        & Go     & Various    & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}F  \\
+        MITMf          & 2015-08-28        & Python & Various    & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}Y\\ %https://github.com/byt3bl33d3r/MITMf
         \midrule
-        mitmproxy      & 2020-03-13        & Python & HTTP/S, WS & \cellcolor{orange!25}P & \cellcolor{orange!25}P & \cellcolor{orange!25}P \\ %https://github.com/mitmproxy/mitmproxy
+        Ettercap       & 2020-08-01        & C      & Various    & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}Y\\
         \midrule
-        mProxy         & Pre-Releases only & Go     & MQTT       & ?                      & \cellcolor{green!25}F  & -                      \\ %https://github.com/mainflux/mproxy
+        bettercap      & 2021-05-22        & Go     & Various    & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}F & \cellcolor{green!25}Y \\
         \midrule
-        IOXY           & Source only       & Go     & MQTT       & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}F  \\ %https://github.com/mainflux/mproxy
+        mitmproxy      & 2021-01-21        & Python & \makecell{\ac{HTTPS}, \ac{WS},\\ \ac{TLS}, \ac{TCP}} & \cellcolor{orange!25}P & \cellcolor{orange!25}P & \cellcolor{orange!25}P & \cellcolor{green!25}Y\\ %https://github.com/mitmproxy/mitmproxy
+        \midrule
+        mProxy         & Pre-Releases only & Go     & \makecell{\ac{MQTT}, \\\ac{MQTT}/\ac{WS}}       & \cellcolor{green!25}F                      & \cellcolor{green!25}F  & \cellcolor{green!25}F & \cellcolor{green!25}Y                     \\ %https://github.com/mainflux/mproxy
+        \midrule
+        IOXY           & Source only       & Go     & \makecell{\ac{MQTT},\\ \ac{MQTT}/\ac{WS},\\ \ac{MQTT}/\ac{TLS}}       & \cellcolor{green!25}F  & \cellcolor{green!25}F  & \cellcolor{green!25}F & \cellcolor{green!25}Y \\ %https://github.com/mainflux/mproxy
         \bottomrule
     \end{tabular}
-    \caption[Comparison of existing software]{Comparison of existing software where $R$, $W$ and $D$ describe read, write and deletion capabilities, respectively. $F$, $N$ and $P$ indicate full, no or partial functionality, respectively.}
+    \caption[Comparison of existing software]{Comparison of existing software where $R$, $W$ and $D$ describe read, write and deletion capabilities, respectively. $F$, $N$ and $P$ indicate full, no or partial functionality, respectively. $Y$ and $N$ indicate whether a tool is released under an \ac{OSS} license or not.}
     \label{table:comparison-existing-software}
 \end{table}
