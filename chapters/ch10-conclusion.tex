@@ -1,13 +1,22 @@
-% 8. Ausblick + Fazit
 \chapter{Conclusion}
 \label{chap:conclusion}
-
-\emph{TBD}
+The goal of this thesis was to develop a concept for a modular proxy application that allows penetration testers to assess the security implementations of \ac{IoT} applications.\\
+Two design concepts were proposed; one featuring a monolithic and the other featuring a distributed software architecture. They share common components and interfaces for essential tasks such as protocol specific (de-)serialization of network packets. Due to these concepts being operating system, platform and framework agnostic, they can be implemented for a wide range of systems.\\
+%The monolithic design concept proposes a single application that can be deployed on a single machine, thus it is comparatively easy to deployment. This monolithic architecture implies a severe constraint though: the application dictates which programming language or framework may be used for development of extensions and integration of such extensions  may require recompilation and re-redeployment of the whole application.\\
+%Contrary to this, the distributed design concept decouples extensions (and thus, development and deployment thereof) from the central proxy application. Extensions are implemented as separate units and may be run on separate machines independent of the central application. Both parties communicate via \ac{RPC} techniques.\par
+An exemplaric implementation of the monolithic design concept, net-riot, realized core components used for routing, (de-)serializing and transforming \ac{HTTP}, \ac{WS} and \ac{MQTT} packets. Due to bugs in its implementation that affect the stacking of its \ac{MQTT} and \ac{WS} protocol implementations and the lack of time to fix these, net-riot is not operable in the scenario it was designed for yet. However, tests conducted with network stacks incorporating \ac{HTTP} and \ac{WS} communication were successful. While these bugs can most likely be resolved, future effort might instead be better invested in completing the distributed design concept and basing an implementation on it.\\
+Especially the complex runtime behaviour and high amount of abstraction required to design protocol-agnostic interfaces proved to be challenges during the work on this thesis. Therefore, future work on this topic should aim to reduce the impact of these challenges by taking them into account during the development process:
+\begin{itemize}
+    \item Flat data-structures and hierarchies can improve the traceability of data flow and thus support debugging.
+    \item A contact person that is proficient in penetration testing and familiar with its challenges and requirements should be interviewed and asked for feedback on a regular basis.
+    \item The creation and configuration of test environments should be streamlined so that testing can be performed regularly, ensuring that implemented features work correctly and according to specification.
+\end{itemize}
 
 \section{Outlook}
 \label{sec:outlook}
-\emph{TBD: Discuss specific steps that can be taken to fully implement the concept.}
+While the work on this thesis is completed, the project of designing and implementing a modular proxy application for testing \ac{IoT} applications is not. There is a set of opportunities to continue this work:
 \begin{itemize}
-    \item \emph{UI based config editor}
-    \item \emph{Flat hierarchy!}
+    \item The distributed design concept promises attractive quality attributes attributes such as even better deployment and capabilities and extensibility. Also, its flattened hierarchy of \acp{FSM} and network stacks improve the debugging process. However, it was not fully defined and further work is required to fully define its components and interfaces.
+    \item Consequently, an implementation based on the distributed design concept promises to be more feasible than net-riot's implementation based on the monolithic concept. The barrier of entry to such an implementation is lowered further due to the fact that the separation of proxy application and extensions allows free choice of multiple programming languages, platforms and frameworks for the systems.
+    \item Of course, an evaluation of the usefulness of the modular proxy application is still an interesting endeavour. Whether it is based on the monolithic or the distributed design concept is not relevant since, from a black-box perspective, they perform the same tasks. Therefore future work could either begin at finishing net-riot or finalizing the distributed design concept.  
 \end{itemize}

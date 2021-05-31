@@ -51,7 +51,7 @@ Figure \ref{fig:activity-fsms} illustrates the recursive nature of this concept 
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{img/ch05/classes-1-fsm-rules-netstack.pdf}
-    \captionof{figure}{?} %TODO: Describe
+    \captionof{figure}{\emph{StateMachines} used rules to determine whether state changes should take place. \emph{IChainRules}, \emph{AndRules} and \emph{OrRules} allowed to combine multiple rules and provided a way to specify logic using $OR$ and $AND$ operators.}
     \label{fig:classes-1-fsm-rules-netstack}
 \end{figure}
 \subsection{State-Machines} The classes related to the state-machine component are shown in figure \ref{fig:classes-1-fsm-rules-netstack}: \emph{StateMachines} hold a set of \emph{States} and \emph{Transitions}. In order to change states, state-machines evaluate a context by checking each of their transitions for whether their conditions for transition are met or not. This context is an aggregation of the \emph{memory} of each state-machine and their active states in the active pipeline. Transitions are defined by a source state, destination state and an \emph{IRule} that evaluates a given context. Rules can be concatenated with logical $AND$ or $OR$ operators and are designed to be scripts that operate on the given context. This allows the creation of nested rules such as the following one:
@@ -63,7 +63,7 @@ States hold a \enquote{NetStack} which in turn encapsulate a series of connected
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{img/ch05/classes-3-gateway.pdf}
-    \captionof{figure}{?} %TODO: Describe
+    \captionof{figure}{By introducing \emph{Gateways}, \emph{GatewayPipes} and \emph{RelayPipes}, multiplexing pipes could be implemented.}
     \label{fig:classes-3-gateway}
 \end{figure}
 \subsection{Gateway} The gateway component is defined by the \enquote{IGateway} interface shown in figure \ref{fig:classes-3-gateway}. It is designed to be run as a service in a separate thread that interacts with communication interfaces on machines (i.e. Bluetooth dongles or Ethernet interfaces). During operation it accepts incoming connections C\textsubscript{I} and creates its own respective outgoing connections C\textsubscript{O} to remote servers. Pairs of connections C\textsubscript{I} and C\textsubscript{O} are held in technology-specific pipe implementations and encapsulated in individual \enquote{RelayPipe} instances. Those RelayPipe instances are assigned to \enquote{GatewayPipe} instances. Improving on the first prototype's design, the GatewayPipe acts as a multiplexing pipe that accepts messages originating from the two encapsulating \enquote{RelayPipes} that act as two communication ports (e.g. the client device and the cloud server of scenario \#2 described in section \ref{sec:example-scenarios}) that hold information about the address of their communication peers in their address field (e.g. an \ac{IP} address of the remote peer). For instance, two \ac{TCP} client sockets can be handled by two \enquote{TcpPipes} (that inherit from the RelayPipe class), allowing \ac{TCP} packets to be routed into the pipeline via a GatewayPipe. Once messages are processed and sent back up the pipeline to a GatewayPipe, the GatewayPipe can find the correct RelayPipe to relay the message to by comparing their addresses with the message's \enquote{MessageDirection} information.
@@ -72,7 +72,7 @@ States hold a \enquote{NetStack} which in turn encapsulate a series of connected
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{img/ch05/classes-2-pipes.pdf}
-    \captionof{figure}{The interfaces, classes and enums used to represent pipes, their specializations and associated classes. This iteration separates BasePipes from IEncoders and IProcessors so BasePipes only implement routing of messages.}
+    \captionof{figure}{The interfaces, classes and enums used to represent pipes, their specializations and associated classes. This iteration separates \emph{BasePipes} from \emph{IEncoders} and \emph{IProcessors} so \emph{BasePipes} only implement routing of messages.}
     \label{fig:classes-2-pipes}
 \end{figure}
 
@@ -87,7 +87,7 @@ While there are many opportunities for specific implementations of the IProcesso
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{img/ch05/classes-4-messages.pdf}
-    \captionof{figure}{?} %TODO: Describe
+    \captionof{figure}{The data-structures used to represent messages, their meta-data and payloads.}
     \label{fig:classes-4-messages}
 \end{figure}
 \subsection{Messages}
@@ -99,7 +99,7 @@ The design shown in section \ref{sec:design-1} was an iteration of the design wo
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{img/ch05/component-view2-1.pdf}
-    \captionof{figure}{?} %TODO: Describe
+    \captionof{figure}{A component diagram showing the external systems communicating with the system and their connection to internal components.}
     \label{fig:component-view2-1}
 \end{figure}
 \subsection{Overview}
@@ -108,13 +108,13 @@ Another iteration of the design (shown in figure \ref{fig:component-view2-1}) wa
 \begin{figure}[h]
     \centering
     \includegraphics[width=10cm]{img/ch05/registry-remoteunit.pdf}
-    \captionof{figure}{?} %TODO: Describe
+    \captionof{figure}{In this concept, $n$ separate \emph{Units} can be registered at a central \emph{Registry}. \emph{Units} may provide an arbitrary amount of \emph{Features}.}
     \label{fig:registry-units}
 \end{figure}
 \begin{figure}[ht]
     \centering
     \includegraphics[width=14cm]{img/ch05/component-view2-3-registry-port-unit.pdf}
-    \captionof{figure}{?} %TODO: Describe
+    \captionof{figure}{Visualized in this diagram, the distributed implementation and central registration of features is the core idea of the Registry and Unit components.}
     \label{fig:component-view2-3-registry-port-unit}
 \end{figure}
 \subsection{Registry and Units} To implement de-centralized processing of messages, a central registry is required to register remote units (shown in figure \ref{fig:registry-units}).
