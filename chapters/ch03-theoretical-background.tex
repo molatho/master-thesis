@@ -131,6 +131,7 @@ In information security, there are three properties to information systems defin
 These properties are commonly referred to as the \enquote{CIA triad} of \enquote{CIA definitions}. However, there are shortcomings to these definitions that are discussed in literature: for instance, by presenting a set of examples, Lundgren et al. point out that the CIA definitions are not suitable to appropriately cover all security requirements \cite{Lundgren2019DefiningIS}.
 
 \subsection{Methodology}
+Information security involves a variety of techniques and methodologies. The ones relevant to this work are discussed in the following sections.
 \subsubsection{Penetration Testing}
 The SANS Institute defines penetration testing as \enquote{the authorized, scheduled and systematic process of using known vulnerabilities in an attempt to perform an intrusion into host, network or application resources} \cite{braden_2002}.\\
 There are various guidelines for penetration tests targetting different types of applications: The \ac{OWASP} \ac{ASVS}, \ac{MSVS} and \ac{ISVS} propose open standards for conducting web application, mobile application and \ac{IoT} penetration tests, respectively \cite{owaspasvs}\cite{owaspmsvs}\cite{owaspisvs}.\\
@@ -138,24 +139,26 @@ The \ac{OWASP} \ac{PTES} divides the penetration testing process into seven phas
 \begin{enumerate}
     \item Pre-engagement Interactions: Preparation of the penetration test and definition of the scope of the test (e.g. networks and duration).
     \item Intelligence Gathering: Collecting information about the target systems (e.g. making use of \ac{OSINT} methods and tools) to reduce the risk of being detected by security systems.
-    \item Threat Modelling: Inferring potential systems in place, risks associated with the operation of those and possible mitigations thereof that may indicate potential attack vectors\footnote{\enquote{The attack vector is the way in which an attack reaches its target.}\cite{HANSMAN200531}}.
-    \item Vulnerability Analysis:
-    \item Exploitation:
-    \item Post Exploitation:
-    \item Reporting:
+    \item Threat Modelling: Inferring potential systems in place, risks associated with the operation of those and possible mitigations thereof that may indicate potential attack vectors\footnote{\enquote{The attack vector is the way in which an attack reaches its target.} \cite{HANSMAN200531}}.
+    \item Vulnerability Analysis: Identification and verification of vulnerabilities.
+    \item Exploitation: Active abuse of found vulnerabilities to achieve goals such as privilege escalation or pivoting\footnote{\enquote{Pivoting is the exclusive method of using an instance also known by \enquote{foothold} to be able to \enquote{move} from place to place inside the compromised network.} \cite{shaikh_2017}}.
+    \item Post Exploitation: Establishing persistent access to compromised systems and exfiltration of data (such as evidence of compromise).
+    \item Reporting: Producing a report that documents found vulnerabilities and exploits used against the system. This document serves the contractor as a basis for decisions to make about the further development of the system.
 \end{enumerate}
 
 \subsubsection{Red-Teaming}
-\subsubsection{Fuzzing}
+Oakley describes (cyber) red-teaming as a technique \enquote{to simulate [an] attack against an organization to test information systems and their related facilities} \cite[p.1-14]{Oakley2019}.
 
-\subsection{Man-In-The-Middle Attacks}
-\ac{MITM}
-%Cite: A Survey of Man In The Middle Attacks
+\subsubsection{Fuzzing}
+Sutton et al. define fuzzing as \enquote{a method for discovering faults in software by providing unexpected input and monitoring for exceptions} indicating \enquote{undefined or insecure behaviour} \cite[p.22]{Sutton2007}.
+
+\subsubsection{Man-In-The-Middle Attacks}
+The \ac{ACSC} defines \ac{MITM} as \enquote{a form of malicious activity where the attacker secretly accesses, relays and possibly alters the communication between two parties who believe they are communicating directly with each other} \cite{pitm2020}.
 
 \subsection{Tools}
-There are many tools used in information security. They vary greatly in their features, field of use and maturity. The following paragraphs describe tools relevant to this thesis and the fields of use it touches.
+There are many tools used in information security. They vary greatly in their features, fields of use and maturity. The following paragraphs describe tools relevant to this thesis and the fields of use it touches.
 
-\paragraph{Wireshark} First released in 1998, \emph{Wireshark} is a cross-platform and open-source tool used for network analysis, including \emph{network sniffing} \cite{wireshark}. It is written mainly in C, consists of more than 3,600,000 lines of C code\footnote{This number was returned by the \emph{cloc} utility run on commit \emph{c73ab16b} from 23rd May 2021 of Wireshark's GitLab source-code repository \cite{wiresharkgit}.} and features a \ac{GUI}. Although it is described as a network protocol analyser, it also supports sniffing of \ac{USB} packets. It implements a wide array of \emph{dissectors} for various protocols and allows detailed examination of network packets (as shown in figure \ref{fig:wireshark}).
+\paragraph{Wireshark} First released in 1998, \emph{Wireshark} is a cross-platform and open-source tool used for network analysis, including \emph{network sniffing}\footnote{\enquote{Packet sniffing is a method of tapping each packet as it flows across the network.}\cite{packetsniffing}} \cite{wireshark}. It is written mainly in C, consists of more than 3,600,000 lines of C code\footnote{This number was returned by the \emph{cloc} utility run on commit \emph{c73ab16b} from 23rd May 2021 of Wireshark's GitLab source-code repository \cite{wiresharkgit}.} and features a \ac{GUI}. Although it is described as a network protocol analyser, it also supports sniffing of \ac{USB} packets. It implements a wide array of \emph{dissectors} for various protocols and allows detailed examination of network packets (as shown in figure \ref{fig:wireshark}).
 
 \begin{figure}[h]
     \centering
@@ -164,9 +167,9 @@ There are many tools used in information security. They vary greatly in their fe
     \label{fig:wireshark}
 \end{figure}
 
-\subsubsection{Specific \acp{MITM}}
-The following tools are \acp{MITM} that support specific protocols only:
-%Specific mitms:
+\subsubsection{Protocol Specific \ac{MITM} Tools}
+The following tools are \ac{MITM} that support specific protocols only:
+
 \paragraph{Burp Suite} Developed and distributed by \enquote{PortSwigger} as a commercial product, \emph{Burp Suite} is a tool specialized for web-application testing \cite{burpsuite}. It can be used as a \ac{MITM} for \ac{HTTP} communication by configuring the operating system or browser to use its internal \ac{HTTP} server as a proxy. While it implements basic support for \ac{WS}, it is mainly used for \ac{HTTP} (and nowadays \ac{HTTPS}) and lacks support for other protocols. Aside from its internal proxy server, it also provides specialized features such as the \enquote{Repeater} which is used to send forged \ac{HTTP} requests. The freely available \enquote{Community Edition} (shown in figure \ref{fig:burpsuite}) allows use of most of the tool's features.
 
 \begin{figure}[h]
@@ -182,6 +185,6 @@ The following tools are \acp{MITM} that support specific protocols only:
 \subsubsection{Generic \acp{MITM}}
 The following tools are generic \acp{MITM} that support a wide range of network protocols:
 \paragraph{ettercap} While \emph{ettercap} was initially developed as a network sniffer for switched \ac{LAN}, it was gradually extended to implement a set of \ac{MITM} attacks such as \ac{ARP} spoofing and \emph{packet filtering} which allowed modifying intercepted communication \cite{ettercap}. Penetration testers can write custom filters in a scripting language to implement their own packet filtering logic. It is written in C and implements network protocols of layers 1 to 4 of the \ac{OSI} model. Thus, it does not implement application protocols.
-\paragraph{bettercap} Similar to ettercap, \emph{bettercap} implements network sniffing and other features used for network analysis and discovery. However, contrary to ettercap, it aims to support a wider range of transport technologies and is described as \enquote{\emph{the Swiss Army knife for WiFi, Bluetooth Low Energy, wireless HID hijacking and IPv4 and IPv6 network reconnaissance and MITM attacks}} \cite{bettercap}. It is written in Go and features a web-interface for configuration, control and monitoring.
+\paragraph{bettercap} Similar to ettercap, \emph{bettercap} implements network sniffing and other features used for network analysis and discovery. However, contrary to ettercap, it aims to support a wider range of transport technologies and is described by its authors as \enquote{\emph{the Swiss Army knife for WiFi, Bluetooth Low Energy, wireless HID hijacking and IPv4 and IPv6 network reconnaissance and MITM attacks}} \cite{bettercap}. It is written in Go and features a web-interface for configuration, control and monitoring.
 \paragraph{Scapy}
 \paragraph{MITMf} %Built on scapy, implements some attacks and servers, not maintained anymore, superseded by bettercap 
